@@ -1,0 +1,466 @@
+﻿@{
+    ViewBag.Title = "PO Lookup";
+    Layout = "~/Views/Shared/Master1.cshtml";
+}
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST"; ;
+    options.OnFailure = "onFailure";
+    options.OnSuccess = "onSuccess";
+    options.InsertionMode = InsertionMode.Replace;
+} 
+@{
+    var sample = "Dear concerned, we are confirming we have read the PO terms and conditions and schedule of delivery.";
+}
+<div>    
+    <ol class="breadcrumb">
+        <li><a href="../Dashboard">Dashboard</a></li>
+        <li><a href="../Purchase">PO Lookup</a></li>
+        <a href="#" style="float:right; font-size:20px;"><i class="fa fa-question-circle"></i></a>
+    </ol>
+    <!-- //breadcrumb-->
+		
+    <div id="content">
+        <div class="row">
+            <table width="100%">
+                <tr>
+                    <td width="40%" style="padding-right: 15px;">
+                        <div class="panel-body">
+                            <form> 
+                                <div>  
+                                    <input type="hidden" id="PO_NO_VAL" value="PO1" />
+                                    <input id="PO_SRCH" class="form-control", style="max-width:150px; float:left; margin-bottom:5px;", placeholder="Type PO Number..." />                                     
+                                    <a href="#" style="float:right; font-size:20px; padding-top:5px; padding-right:10px;"><i class="fa fa-file-text"></i></a>
+                                    <a href="#" style="float:right; padding-top:10px; padding-right:20px;" title="Refresh" onclick="refresh()"><i class="fa fa-refresh"></i></a>                                                                               
+                                </div>
+                                <div class="dataTables_scroll" style="margin-top:5px; margin-bottom:5px;" >
+                                    <div class="dataTables_scrollHead" style="overflow: auto;min-height:450px; width: 100%;margin-top:0px; max-height:450px;">
+                                        <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color:#D9E5F2;">
+                                            <table   border="0" id="PO_LIST" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                   
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>                                    
+                            </form>
+                        </div>
+                    </td>
+                    <td width="60%" style="padding-right: 15px;">
+                        <div class="panel-body">
+                            <form>
+                                <div>
+                                    @*<input type="text" class="form-control" style="max-width:150px; float:left; margin-bottom:5px;" />*@
+                                    <table style="height:10px; width:100%;">
+                                        <thead></thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label custom-label">PO Date</label>
+                                                </td>
+                                                <td class="custom-label-val">
+                                                    <label id="DATE_PO" class="control-label"></label>
+                                                </td>
+                                                <td>
+                                                    <label class="control-label custom-label">Delivery Date</label>
+                                                </td>
+                                                <td class="custom-label-val">
+                                                    <label id="DATE_DEL" class="control-label"></label>
+                                                </td>
+                                                <td>
+                                                    <a href="#" style="float:right; display:block; font-size:15px; padding-top:5px; padding-right:10px; color:red; " title="Quality rejection"><i class="fa fa-thumbs-down"></i></a>
+                                                    <a href="#" style="float:right; display:block; font-size:15px; padding-top:5px; padding-right:20px; " title="Create Case"><i class="fa fa-gears"></i></a>
+                                                </td>
+                                            </tr>                                               
+                                        </tbody>
+                                    </table>                                        
+                                </div>
+                                <div class="dataTables_scroll" style="margin-top:5px; margin-bottom:5px;" >
+                                    <div class="dataTables_scrollHead" style="overflow: auto;min-height:225px; width: 100%;margin-top:0px; max-height:225px;">
+                                        <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color:#D9E5F2;">
+                                            <table border="0" id="GRN_STATUS" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                   
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dataTables_scroll" style="margin-top:5px; margin-bottom:5px;" >
+                                    <div class="dataTables_scrollHead" style="overflow: auto;min-height:225px; width: 100%;margin-top:0px; max-height:225px;">
+                                        <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color:#D9E5F2;">
+                                            <table border="0" id="GRN_ITEMS" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                   
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- //content > row-->
+    </div>
+    <!-- //content-->
+    
+</div>
+
+<script>
+    $(document).ready(initPage);
+
+    function initPage() {
+        getPO();
+    }
+    function refresh() {
+        getPO();
+    }
+    function getPO() {
+        try {
+            var PO = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetPO";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_LIST' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>Select</th>";
+                tmpRows += "<th   aria-label='Phone: '>PO Number</th>";
+                tmpRows += "<th   aria-label='Phone: '>ACK</th>";
+                tmpRows += "<th   aria-label='Phone: '>PO Date</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        if (count == 1) {
+                            PO = val.PO;
+                            $("#DATE_PO").text(ConvertJsonDateString(val.DATE_PO));
+                            $("#DATE_DEL").text(ConvertJsonDateString(val.DATE_DEL));
+                        }
+                        tmpRows += "<td><input type='radio' onClick='callG(this)' name='IS_SELECTED' value='" + val.PO + "'/></td>";
+
+                        tmpRows += "<td>" + val.PO + "</td>";
+                        tmpRows += "<td><input type='checkbox' onClick='setPO(this)' name='IS_SELECTED1' title='Acknowledge' value='" + val.PO + "," + val.REF_NO + "'/></td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.DATE_PO) + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PO_LIST").replaceWith(tmpRows);
+                if (count > 0) {
+                    getGRN(PO);
+                }
+                customRadio("IS_SELECTED");
+                customAck("IS_SELECTED1");
+            }
+
+            var dataRec = { "PO": PO }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function callG(id) {
+        var PO = $(id).val();
+        getGRN(PO);
+        return true;
+    }
+    function getGRN(PO) {
+        try {
+            //var PO = $(uiObj).val();
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetGRN";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='GRN_STATUS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th '  aria-label='Name: '>Status</th>           ";
+                tmpRows += "<th   aria-label='Phone: '>GRN Number</th>";
+                tmpRows += "<th   aria-label='Phone: '>Date</th>";
+                tmpRows += "<th   aria-label='Phone: '>LR Number</th>";
+                tmpRows += "<th   aria-label='Phone: '>LR Date</th>";
+                tmpRows += "</tr>     ";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        $("#DATE_PO").text(ConvertJsonDateString(val.DATE_PO));
+                        $("#DATE_DEL").text(ConvertJsonDateString(val.DATE_DEL));
+                        tmpRows += "<tr>";
+                        if (val.STAT_GRN == 0) {
+                            tmpRows += "<td> <img src='/assets/img/not_progressed.png' /> </td>";
+                        }
+                        else if (val.STAT_GRN == 1) {
+                            tmpRows += "<td> <img src='/assets/img/partial.png' /> </td>";
+                        }
+                        else if (val.STAT_GRN == 2) {
+                            tmpRows += "<td> <img src='/assets/img/completed.png' /> </td>";
+                        }
+                        else if (val.STAT_GRN == 3) {
+                            tmpRows += "<td> <img src='/assets/img/cancelled.png' /> </td>";
+                        }
+                        tmpRows += "<td>" + val.GRN_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.GRN_DT) + "</td>";
+                        tmpRows += "<td>" + val.LR_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.LR_DT) + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+                        $("#DATE_PO").text("");
+                        $("#DATE_DEL").text("");
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 6; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#GRN_STATUS").replaceWith(tmpRows);
+                getGRNInfo(PO);
+            }
+
+            var dataRec = { "PO": PO }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function getGRNInfo(PO) {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetGRNInfo";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='GRN_ITEMS' class='table dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th ' aria-label='Name: '>GRN Number</th>";
+                tmpRows += "<th   aria-label='Phone: '>Item</th>";
+                tmpRows += "<th   aria-label='Phone: '>Material</th>";
+                tmpRows += "<th   aria-label='Phone: '>Description</th>";
+                tmpRows += "<th   aria-label='Phone: '>UoM</th>";
+                tmpRows += "</tr>     ";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.GRN_NO + "</td>";
+                        tmpRows += "<td>" + val.POITEM + "</td>";
+                        tmpRows += "<td>" + val.MATERIAL + "</td>";
+                        tmpRows += "<td>" + val.MTEXT + "</td>";
+                        tmpRows += "<td>" + val.GRN_QTY + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 6; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#GRN_ITEMS").replaceWith(tmpRows);
+            }
+
+            var dataRec = { "PO": PO }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function ConvertJsonDateString(jsonDate) {
+        var shortDate = null;
+        if (jsonDate) {
+            var regex = /-?\d+/;
+            var matches = regex.exec(jsonDate);
+            var dt = new Date(parseInt(matches[0]));
+            var month = dt.getMonth() + 1;
+            var monthString = month > 9 ? month : '0' + month;
+            var day = dt.getDate();
+            var dayString = day > 9 ? day : '0' + day;
+            var year = dt.getFullYear();
+            if (year != 1)
+                shortDate = monthString + '/' + dayString + '/' + year;
+            else
+                shortDate = "";
+        }
+        return shortDate;
+    };
+    $("#PO_SRCH").keyup(function (e) {
+        try {
+            var SEARCH_VAL = $("#PO_SRCH").val();
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchPO";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_LIST' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>Select</th>";
+                tmpRows += "<th   aria-label='Phone: '>PO Number</th>";
+                tmpRows += "<th   aria-label='Phone: '>ACK</th>";
+                tmpRows += "<th   aria-label='Phone: '>PO Date</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        if (count == 1) {
+                            PO = val.PO;
+                            $("#DATE_PO").text(ConvertJsonDateString(val.DATE_PO));
+                            $("#DATE_DEL").text(ConvertJsonDateString(val.DATE_DEL));
+                        }
+                        tmpRows += "<td><input type='radio' onClick='callG(this)' name='IS_SELECTED' value='" + val.PO + "'/></td>";
+
+                        tmpRows += "<td>" + val.PO + "</td>";
+                        tmpRows += "<td><input type='checkbox' onClick='setPO(this)' name='IS_SELECTED1' title='Acknowledge' value='" + val.PO + "," + val.REF_NO + "'/></td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.DATE_PO) + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PO_LIST").replaceWith(tmpRows);
+                if (count > 0) {
+                    getGRN(PO);
+                }
+                customRadio("IS_SELECTED");
+                customAck("IS_SELECTED1");
+            }
+
+            var dataRec = { "SRCH_VAL": SEARCH_VAL }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    function setPO(PO) {
+        $("#PO_NO_VAL").val(PO);
+        openOrderAck($("#PO_NO_VAL").val());
+    }
+    function setPO(id) {        
+        var value = $(id).val();
+        var arr = value.split(',');
+        var PO = arr[0];
+        var REF_NO = arr[1];
+        openOrderAck(PO, REF_NO);
+        return true;
+    }
+    function openOrderAck(PO, REF_NO) {
+        $("#PO_N").val(PO);
+        $("#REF_NO").val(REF_NO);
+        $("#PO_NO").text(PO);
+        $("#ORD_ACK").dialog({
+            height: 350,
+            width: 500,
+            modal: true
+        });
+    };
+    function onSuccess(data) {
+        if (data.IS_SUCCESS) {
+            $("#ORD_ACK").dialog("close");
+            dsi();
+        }
+        else {
+            Message(data.RESPONSE_MESSAGE, false);
+
+        }
+    }
+    function onFailure(data) {
+        if (data.IS_SUCCESS) {
+            Message(data.RESPONSE_MESSAGE, true);
+        }
+        else {
+            Message(data.RESPONSE_MESSAGE, false);
+        }
+    }
+    function Message(message, isSuccess) {
+        $("#error1").html(message);
+        if (isSuccess) {
+            $(".error").css("color", "green");
+        }
+        else {
+            $(".error").css("color", "red");
+        }
+    }
+</script>
+
+
+<div id="ORD_ACK" title="Order Acknowledgement" style="display:none;">
+    @{ using (Ajax.BeginForm("UpdatePOAck", "Purchase", options))
+       { 
+        <input type="hidden" id="PO_N"  name="PO_NO" class="form-control" value="" /> 
+        <input type="hidden" id="REF_NO"  name="REF_NO" class="form-control" value="" />           
+        <div class="form-group">
+            <label class="control-label" style="color:#00008B;">Order acknowledgement for</label>
+            <label id="PO_NO" class="control-label" style="color:#00008B;"></label>
+        </div>
+                           
+        <div class="form-group">
+            <textarea id="ACK_NOTE" name="ACK_NOTE" class="form-control" style="font-size:12px; color:#00008B; margin-bottom:10px; height:150px; width:450px;">@sample</textarea>
+	    </div>
+        
+        <div class="form-group offset" style="text-align:center; float:right; margin-right:20px; ">
+            <div>
+                    <button type="submit" class="btn btn-theme">ACCEPT</button>
+            </div>        
+        </div>
+        <div class="error"><span id="error1"></span></div>   
+       }
+}  
+</div>

@@ -1,0 +1,105 @@
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\RMS_WEB.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\RMS_WEB.pdb
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\BAL.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\ENTITY.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\Newtonsoft.Json.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Net.Http.Formatting.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Helpers.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.WebHost.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Mvc.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Razor.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Deployment.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Razor.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\UTILITY.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\DAL.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\BAL.pdb
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\ENTITY.pdb
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\UTILITY.pdb
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\Newtonsoft.Json.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Net.Http.Formatting.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Helpers.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.WebHost.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Mvc.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.Razor.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Deployment.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Razor.xml
+C:\Users\user\Desktop\Architecture\RMS_WEB\bin\DAL.pdb
+C:\Users\user\Desktop\Architecture\RMS_WEB\obj\Debug\ARCHITECTURE_WEB.csprojResolveAssemblyReference.cache
+C:\Users\user\Desktop\Architecture\RMS_WEB\obj\Debug\RMS_WEB.dll
+C:\Users\user\Desktop\Architecture\RMS_WEB\obj\Debug\RMS_WEB.pdb
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\RMS_WEB.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\RMS_WEB.pdb
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\BAL.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\ENTITY.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\Microsoft.Web.Infrastructure.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\Newtonsoft.Json.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Net.Http.Formatting.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Helpers.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.WebHost.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Mvc.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Razor.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Deployment.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Razor.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\UTILITY.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\DAL.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\BAL.pdb
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\ENTITY.pdb
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\UTILITY.pdb
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\Newtonsoft.Json.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Net.Http.Formatting.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Helpers.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Http.WebHost.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Mvc.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.Razor.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Deployment.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\System.Web.WebPages.Razor.xml
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\bin\DAL.pdb
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\obj\Debug\ARCHITECTURE_WEB.csprojResolveAssemblyReference.cache
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\obj\Debug\RMS_WEB.dll
+D:\old references\Azhar\Desktop\Architecture\RMS_WEB\obj\Debug\RMS_WEB.pdb
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\obj\Debug\ARCHITECTURE_WEB.csprojResolveAssemblyReference.cache
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\obj\Debug\RMS_WEB.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\obj\Debug\RMS_WEB.pdb
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\RMS_WEB.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\RMS_WEB.pdb
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\BAL.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\ENTITY.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\Microsoft.Web.Infrastructure.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\Newtonsoft.Json.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Net.Http.Formatting.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Helpers.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Http.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Http.WebHost.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Mvc.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Razor.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.WebPages.Deployment.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.WebPages.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.WebPages.Razor.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\UTILITY.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\DAL.dll
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\BAL.pdb
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\ENTITY.pdb
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\UTILITY.pdb
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\Newtonsoft.Json.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Net.Http.Formatting.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Helpers.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Http.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Http.WebHost.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Mvc.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.Razor.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.WebPages.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.WebPages.Deployment.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\System.Web.WebPages.Razor.xml
+D:\Azhar\DotNetDevelopment\Architecture\RMS_WEB\bin\DAL.pdb

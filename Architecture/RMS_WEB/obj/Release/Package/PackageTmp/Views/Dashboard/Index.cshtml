@@ -1,0 +1,1014 @@
+﻿@model RMS_WEB.Models.IPurchaseOrderModel
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/Master1.cshtml";
+}
+<style>
+    .valueLabels {
+        font-size:70%;
+        color:red;
+        
+    }
+    div.valueLabelLight {
+        opacity:0.5;
+        border:none;
+        position:absolute;
+        margin-left:5px;
+    }
+    div.valueLabel {
+        position:absolute;
+        border:none;
+        margin-left:5px;
+    }
+    .handP {
+        cursor: pointer !important;
+    }
+
+    table tr selected {
+        background-color:#D9E5F2;
+    }
+</style>
+<div>
+    <ol class="breadcrumb">
+        <li><a href="#">Inowits Vendor Self-Service Portal</a></li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">Reports
+                <i class="dropdown-icon fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu pull-left icon-right arrow">
+                <li><a href="../Purchase/InvoicePaymentReport"><i class="icon  fa fa-bar-chart-o"></i><span class="custom-report">Invoice Payment Report</span> </a></li>
+                <li><a href="../Purchase/POPaymentReport"><i class="icon  fa fa-bar-chart-o"></i><span class="custom-report">PO Payment Report</span> </a></li>
+                <li><a href="../Purchase/VendorPaymentReport"><i class="icon  fa fa-bar-chart-o"></i><span class="custom-report">Vendor Payment Report</span></a></li>
+            </ul>
+        </li>
+        <a href="#" title="Help" style="float: right; font-size: 20px; margin-top:-5px;"><i class="fa fa-question-circle"></i></a>
+        <div class="avatar-link btn-group btn-group-justified" style="float:right; max-width:200px; margin-right:20px; margin-top:-5px">
+            <a class="btn custom-btn" title="Portfolio"><i class="fa fa-briefcase"></i></a>
+            <a class="btn custom-btn breadcrumTop" data-toggle="modal" href="#md-notification" title="Messages">
+                <i class="fa fa-envelope-o"></i><em class="green"></em>
+            </a>
+            <a class="btn custom-btn breadcrumTop" data-toggle="modal" href="#md-messages" title="Quality rejection">
+                <i class="fa fa-bell-o"></i><em class="active"></em>
+            </a>
+            <a href="../Mail" class="btn custom-btn" title="Contact List"><i class="fa fa-book"></i></a>
+        </div>
+        <!-- //avatar-link-->
+    </ol>
+    <!-- //breadcrumb-->
+    	
+        <div id="content">
+            <div class="row">
+                <table width="100%">
+                    <tr>
+                        <td width="40%" style="padding-right: 15px;">
+                            <div class="panel-body">
+                                <form>
+                                    <table width="100%" style="background-color:#A3C1E4; ">
+                                        <tr>
+                                            <td>
+                                                <input type="text" id="PO_SEARCH" name="PO_SEARCH" class="form-control" value="" placeholder="Search..." style="width: 200px; margin-left:5px;">
+                                            </td>
+                                            <td>
+                                                <a href="../Purchase" title="PO Lookup" style="background-image:url('/assets/img/small_icon.png'); background-repeat:no-repeat; padding-left:5px; padding-right:5px; margin-top:5px; margin-bottom:5px; float: right; font-size: 20px; display:block; margin-right:10px"><i class="fa fa-paperclip"></i></a>
+                                                <a href="../ASN" title="ASN Creation" style="background-image:url('/assets/img/small_icon.png'); background-repeat:no-repeat; padding-left:5px; padding-right:5px; margin-top:5px; margin-bottom:5px; float: right; font-size: 20px; display:block; margin-right:10px"><i class="fa fa-file-text"></i></a>
+                                                <a href="../Purchase/Queries" title="Order Acknowledge" style="background-image:url('/assets/img/small_icon.png'); background-repeat:no-repeat; padding-left:5px; padding-right:5px; margin-top:5px; margin-bottom:5px; float: right; font-size: 20px; display:block; margin-right:10px"><i class="fa fa-thumbs-up"></i></a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="dataTables_scroll">
+                                        <div class="dataTables_scrollHead" style="overflow: auto; min-height: 200px; width: 100%; margin-top: 0px; max-height: 200px;">
+                                            <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #FFF;">
+                                                <table border="0" id="PO_STATUS" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                        <td width="60%">
+                            <div class="panel-body">
+                                <form style="background-color:#A3C1E4; ">
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <input type="text" id="PO_ITEM_SEARCH" name="PO_ITEM_SEARCH" class="form-control" value="" placeholder="Search..." style="width: 200px; margin-left:5px; margin-top:5px; margin-bottom:5px;">
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <label class="control-label custom-label">Selected PO</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="PO_S" name="PO_S" class="form-control" value="" style="width: 100px; margin-left:5px; margin-bottom:5px;" readonly="true">
+                                            </td>
+                                            <td>
+                                                <label class="control-label custom-label">Company Code</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="COMP_CODE" name="COMP_CODE" class="form-control" value="" style="width: 100px; margin-left:5px; margin-bottom:5px;" readonly="true">
+                                            </td>
+                                            <td>
+                                                <label class="control-label custom-label">Purchasing Grp</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="PURCH_ORG" name="PURCH_ORG" class="form-control" value="" style="width: 100px; margin-left:5px; margin-bottom:5px;" readonly="true">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label class="control-label custom-label">Payment Terms</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="PYMT_TERMS" name="PYMT_TERMS" class="form-control" value="" style="width: 100px; margin-left:5px; margin-bottom:5px;" readonly="true">
+                                            </td>
+                                            <td>
+                                                <label class="control-label custom-label">Order Value</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="ORD_VAL" name="ORD_VAL" class="form-control" value="" style="display:inline; width: 50px; margin-left:5px; margin-bottom:5px;" readonly="true">
+                                                <input type="text" id="ORD_UoM" name="ORD_UoM" class="form-control" value="" style="display:inline; width: 50px; margin-bottom:5px;" readonly="true">
+                                            </td>
+                                            <td>
+                                                <label class="control-label custom-label">Delivery DT</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" id="DATE_DEL" name="DATE_DEL" class="form-control" value="" style="width: 100px; margin-left:5px; margin-bottom:5px;" readonly="true">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="dataTables_scroll" style="margin-bottom: 5px;">
+                                        <div class="dataTables_scrollHead" style="overflow: auto; min-height: 140px; width: 100%; margin-top: 0px; max-height: 140px;">
+                                            <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #FFF;">
+                                                <table border="0" id="PO_ITEMS" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="40%" style="padding-right: 15px;">
+                            <div class="panel-body">
+                                <form>
+                                    @*<div id="legendPlaceholder"></div>
+                                    <div id="flotcontainer"></div>*@
+                                    <div id="jqChart" style="width: 500px; height: 230px;">
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                        <td width="60%">
+                            <table width="100%" style="background-color:#A3C1E4; ">
+                                <tr>
+                                    <td>
+                                        <input type="text" id="PO_PYMT_SEARCH" name="PO_PYMT_SEARCH" class="form-control" value="" placeholder="Search..." style="width: 200px; margin-left:5px; margin-top:5px; margin-bottom:5px;">
+                                    </td>
+                                    <td>
+                                                
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="dataTables_scroll" style="margin-bottom: 5px;">
+                                <div class="dataTables_scrollHead" style="overflow: auto; min-height: 200px; width: 100%; margin-top: 0px; max-height: 200px;">
+                                    <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #FFF;">
+                                        <table border="0" id="PO_PYMTS" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <!-- //content > row-->
+        </div>
+        <!-- //content-->
+    
+</div>
+
+<!-- Javascript -->
+<script type="text/javascript">
+
+    $(document).ready(initPage);
+    
+    function initPage() {
+        try {
+            getPOStatus();
+        }
+        catch (ex) {
+            alert(ex);
+        }        
+    }
+    //$(document).ready(function () {
+    //    $(".selected")
+    //});
+    $(document).ready(function () {
+        $('#jqChart').jqChart({
+            
+            legend: { location: 'bottom' },
+            animation: { duration: 1 },
+            shadows: {
+                enabled: true
+            },
+            axes: [
+                {
+                    type: 'category',
+                    location: 'left',
+                    categories: ['PO', 'ASN', 'GRN', 'INV', 'PYMT']
+                },
+                {
+                    type: 'linear',
+                    location: 'bottom',
+                    extendRangeToOrigin: true
+                }
+            ],
+            series: [
+                {
+                    type: 'stackedBar',
+                    title: 'Not Progressed',
+                    data: [62, 70, 68, 58, 52],
+                    labels: {
+                        stringFormat: '%.0f%%',
+                        valueType: 'percentage',
+                        font: '12px sans-serif'
+                    }
+                },
+                {
+                    type: 'stackedBar',
+                    title: 'Partial',
+                    data: [56, 30, 62, 65, 40],
+                    labels: {
+                        stringFormat: '%.0f%%',
+                        valueType: 'percentage',
+                        font: '12px sans-serif'
+                    }
+                },
+                {
+                    type: 'stackedBar',
+                    title: 'Completed',
+                    data: [33, 42, 54, 23, 54],
+                    labels: {
+                        stringFormat: '%.0f%%',
+                        valueType: 'percentage',
+                        font: '12px sans-serif'
+                    }
+                },
+                {
+                    type: 'stackedBar',
+                    title: 'Cancelled',
+                    data: [12, 36, 9, 55, 42],
+                    labels: {
+                        stringFormat: '%.0f%%',
+                        valueType: 'percentage',
+                        font: '12px sans-serif'
+                    }
+                }
+            ]
+        });
+    });
+    function getKPI() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Dashboard/GetKPI";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var ind_0, ind_1, ind_2, ind_3, ind_4, comp, rej;
+                $(dataRecord).each(function (i, dat) {
+                    if (dat.IS_SUCCESS) {
+                        //Plotting the graph
+                        if (dat.KPI_PARAM == 0)
+                            ind_0 = dat.PERCEN;
+                        else if (dat.KPI_PARAM == 1)
+                            ind_1 = dat.PERCEN;
+                        else if (dat.KPI_PARAM == 2)
+                            ind_2 = dat.PERCEN;
+                        else if (dat.KPI_PARAM == 3)
+                            ind_3 = dat.PERCEN;
+                        else if (dat.KPI_PARAM == 4)
+                            ind_4 = dat.PERCEN;
+                        comp = dat.COMPLETED;
+                        rej = dat.REJECTED;
+                    }
+                    else {
+                        //Message(dat.RESPONSE_MESSAGE, dat.IS_SUCCESS);
+                    }
+
+                });
+                jQuery("label[for='Completed']").html('(' + comp + ')');
+                jQuery("label[for='Rejects']").html('(' + rej + ')');
+                KPI(ind_4, ind_3, ind_2, ind_1, ind_0);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+
+    }
+    function KPI(PO, ASN, GRN, INV, PYMT) {
+
+        var data1 = [
+            [PO, 20],
+            [ASN, 40],
+            [GRN, 60],
+            [INV, 80],
+            [PYMT, 100]
+        ];
+        // Setup labels for use on the Y-axis  
+        var tickLabels = [[20, 'PO'], [40, 'ASN'], [60, 'GRN'], [80, 'INV'], [100, 'PYMT']];
+        
+        var options = {
+            bars: {
+                barWidth: 10,
+                horizontal: true,
+                show: true
+            },
+            xaxis: {
+                axisLabel: "Percentage %",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 10,
+                color: "black",
+                max: 100
+            },
+            yaxis: {
+                axisLabel: "Processes",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Verdana, Arial',
+                axisLabelPadding: 3,
+                color: "black",
+                ticks: tickLabels
+            },
+            grid: {
+                hoverable: true,
+                borderWidth: 1,
+                backgroundColor: {
+                    colors: ["#D9E5F2", "#D9E5F2"]
+                }
+            }
+
+        };         
+
+        somePlot = $.plot($("#flotcontainer"), [data1], options);
+
+        var ctx = somePlot.getCanvas().getContext("2d");
+        var data = somePlot.getData()[0].data;
+        var xaxis = somePlot.getXAxes()[0];
+        var yaxis = somePlot.getYAxes()[0];
+        var offset = somePlot.getPlotOffset();
+        ctx.font = "Verdana, Arial";
+        ctx.fillStyle = "red";
+        for (var i = 0; i < data.length; i++) {
+            var text = data[i][0] + ' % ';
+            var metrics = ctx.measureText(text);
+            var xPos = ((xaxis.p2c(data[i][0]) + offset.left) - metrics.width) + 30;
+            var yPos = yaxis.p2c(data[i][1]) + offset.top - 5;
+            ctx.fillText(text, xPos, yPos);
+        }
+    }
+    function getPOItems(uiObj) {
+        try {
+            var PO = $(uiObj).val();
+            
+            var id = "." + PO;
+            $(id).addClass("selected");
+            //$(id).css({ "background-color": "#D9E4F2" });
+            var $self = this;
+            $self.ajaxURL = "/Dashboard/GetPOItems";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_ITEMS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Item: '>Item</th>";
+                tmpRows += "<th   aria-label='Material: '>Material</th>";
+                tmpRows += "<th   aria-label='Description: '>Description</th>";
+                tmpRows += "<th   aria-label='Qty: '>Qty.</th>";
+                tmpRows += "<th   aria-label='UoM: '>UoM</th>";
+                tmpRows += "<th   aria-label='AMT: '>AMT</th>";
+                tmpRows += "<th   aria-label='CURR: '>CURR</th>";
+                tmpRows += "<th   aria-label='ASN: '>ASN</th>";
+                tmpRows += "<th   aria-label='GRN: '>GRN</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        $("#PO_S").val(val.PO);
+                        $("#COMP_CODE").val(val.COMP_CODE);
+                        $("#PURCH_ORG").val(val.PURCH_ORG);
+                        $("#PYMT_TERMS").val(val.PYMT_TERMS);
+                        $("#ORD_VAL").val(val.ORD_VAL);
+                        $("#ORD_UoM").val(val.ORD_CURR);
+                        $("#DATE_DEL").val(ConvertJsonDateString(val.DATE_DEL));
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.POITEM + "</td>";
+                        tmpRows += "<td>" + val.MATERIAL + "</td>";
+                        tmpRows += "<td>" + val.MTEXT + "</td>";
+                        tmpRows += "<td>" + val.ORD_QTY + "</td>";
+                        tmpRows += "<td>" + val.ORD_UoM + "</td>";
+                        tmpRows += "<td>" + val.ORD_VAL + "</td>";
+                        tmpRows += "<td>" + val.ORD_CURR + "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_ASN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_ASN == 1) {
+                            tmpRows += "<img src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_ASN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_ASN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px' class='handP'>";
+                        if (val.STAT_GRN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_GRN == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_GRN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_GRN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#PO_ITEM_SEARCH").attr('placeholder', 'Search in ' + count + ' rows');
+                $("#PO_ITEMS").replaceWith(tmpRows);
+                getPayments();
+            }
+
+            var dataRec = { "PO": PO }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function getPOStatus() {
+        try {
+            var $self = this;
+            $self.ajaxURL = "/Dashboard/GetPOStatus";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_STATUS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>Select</th>";
+                tmpRows += "<th   aria-label='Phone: '>Purchase Order</th>";
+                tmpRows += "<th   aria-label='Phone: '>ACK</th>";
+                tmpRows += "<th   aria-label='Phone: '>ASN</th>";
+                tmpRows += "<th   aria-label='Phone: '><i class='icon  fa fa-pencil'></i></th>";
+                tmpRows += "<th   aria-label='Phone: '>Action</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr class='"+val.PO+"'>";
+                        tmpRows += "<td width='60px'><input type='radio' onClick='getPOItems(this)' name='IS_SELECTED' value='" + val.PO + "'/></td>";
+                        tmpRows += "<td>" + val.PO + "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_ACK == 0)
+                        {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not progressed' cursor='pointer' />";
+                        }
+                        else if (val.STAT_ACK == 1)
+                        {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_ACK == 2)
+                        {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_ACK == 3)
+                        {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_ASN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not progressed' />";
+                        }
+                        else if (val.STAT_ASN == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_ASN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_ASN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.VERSION_PO == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Version 0' />";
+                        }
+                        else if (val.VERSION_PO == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Version 1' />";
+                        }
+                        else if (val.VERSION_PO == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Version 2' />";
+                        }
+                        else if (val.VERSION_PO == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Version 3' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px'>";
+                        tmpRows += "<input type='checkbox' onClick='setPO(this)' name='IS_SELECTED1' title='PO Lookup' value='" + val.PO + "'/>";
+                        tmpRows += "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#PO_SEARCH").attr('placeholder', 'Search in ' + count  + ' rows');
+                $("#PO_STATUS").replaceWith(tmpRows);
+                customRadio("IS_SELECTED");
+                custompaperClip("IS_SELECTED1");
+                getItems();
+            }
+
+            var dataRec = {  }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function getItems() {
+        try {
+            var $self = this;
+            $self.ajaxURL = "/Dashboard/GetPO_Items";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_ITEMS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Item: '>Item</th>";
+                tmpRows += "<th   aria-label='Material: '>Material</th>";
+                tmpRows += "<th   aria-label='Description: '>Description</th>";
+                tmpRows += "<th   aria-label='Qty: '>Qty.</th>";
+                tmpRows += "<th   aria-label='UoM: '>UoM</th>";
+                tmpRows += "<th   aria-label='AMT: '>AMT</th>";
+                tmpRows += "<th   aria-label='CURR: '>CURR</th>";
+                tmpRows += "<th   aria-label='ASN: '>ASN</th>";
+                tmpRows += "<th   aria-label='GRN: '>GRN</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.POITEM + "</td>";
+                        tmpRows += "<td>" + val.MATERIAL + "</td>";
+                        tmpRows += "<td>" + val.MTEXT + "</td>";
+                        tmpRows += "<td>" + val.ORD_QTY + "</td>";
+                        tmpRows += "<td>" + val.ORD_UoM + "</td>";
+                        tmpRows += "<td>" + val.ORD_VAL + "</td>";
+                        tmpRows += "<td>" + val.ORD_CURR + "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_ASN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_ASN == 1) {
+                            tmpRows += "<img src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_ASN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_ASN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px' class='handP'>";
+                        if (val.STAT_GRN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_GRN == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_GRN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_GRN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#PO_ITEM_SEARCH").attr('placeholder', 'Search in ' + count + ' rows');
+                $("#PO_ITEMS").replaceWith(tmpRows);
+                getPayments();
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function getPayments() {
+        try {
+            var $self = this;
+            $self.ajaxURL = "/Dashboard/GetPOPYMTS";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_PYMTS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Date</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Paid</th>";
+                tmpRows += "<th   aria-label='Phone: '>Status</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.INV + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.INV_DT) + "</td>";
+                        tmpRows += "<td>" + val.INV_AMT + "</td>";
+                        tmpRows += "<td>" + val.INV_PAID + "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_PYMT == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_PYMT == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_PYMT == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_PYMT == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#PO_PYMT_SEARCH").attr('placeholder', 'Search in ' + count + ' rows');
+                $("#PO_PYMTS").replaceWith(tmpRows);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    $("#PO_SEARCH").keyup(function (e) {
+        try {
+            var SEARCH_VAL = $("#PO_SEARCH").val();
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchPO";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_STATUS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>Select</th>";
+                tmpRows += "<th   aria-label='Phone: '>Purchase Order</th>";
+                tmpRows += "<th   aria-label='Phone: '>ACK</th>";
+                tmpRows += "<th   aria-label='Phone: '>ASN</th>";
+                tmpRows += "<th   aria-label='Phone: '><i class='icon  fa fa-pencil'></i></th>";
+                tmpRows += "<th   aria-label='Phone: '>Action</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td width='60px'><input type='radio' onClick='getPOItems(this)' name='IS_SELECTED' value='" + val.PO + "'/></td>";
+                        tmpRows += "<td>" + val.PO + "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_ACK == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_ACK == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_ACK == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_ACK == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_ASN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_ASN == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_ASN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_ASN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.VERSION_PO == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Version 0' />";
+                        }
+                        else if (val.VERSION_PO == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Version 1' />";
+                        }
+                        else if (val.VERSION_PO == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Version 2' />";
+                        }
+                        else if (val.VERSION_PO == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Version 3' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px'>";
+                        tmpRows += "<input type='checkbox' onClick='setPO(this)' name='IS_SELECTED1' title='PO Lookup' value='" + val.PO + "'/>";
+                        tmpRows += "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#PO_SEARCH").attr('placeholder', 'Search in ' + count + ' rows');
+                $("#PO_STATUS").replaceWith(tmpRows);
+                customRadio("IS_SELECTED");
+                custompaperClip("IS_SELECTED1");
+                getItems();
+            }
+
+            var dataRec = { "SRCH_VAL": SEARCH_VAL }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    $("#PO_ITEM_SEARCH").keyup(function (e) {
+        try {
+            var SEARCH_VAL = $("#PO_ITEM_SEARCH").val();
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchPOItem";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_ITEMS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Item: '>Item</th>";
+                tmpRows += "<th   aria-label='Material: '>Material</th>";
+                tmpRows += "<th   aria-label='Description: '>Description</th>";
+                tmpRows += "<th   aria-label='Qty: '>Qty.</th>";
+                tmpRows += "<th   aria-label='UoM: '>UoM</th>";
+                tmpRows += "<th   aria-label='AMT: '>AMT</th>";
+                tmpRows += "<th   aria-label='CURR: '>CURR</th>";
+                tmpRows += "<th   aria-label='ASN: '>ASN</th>";
+                tmpRows += "<th   aria-label='GRN: '>GRN</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.POITEM + "</td>";
+                        tmpRows += "<td>" + val.MATERIAL + "</td>";
+                        tmpRows += "<td>" + val.MTEXT + "</td>";
+                        tmpRows += "<td>" + val.ORD_QTY + "</td>";
+                        tmpRows += "<td>" + val.ORD_UoM + "</td>";
+                        tmpRows += "<td>" + val.ORD_VAL + "</td>";
+                        tmpRows += "<td>" + val.ORD_CURR + "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_ASN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_ASN == 1) {
+                            tmpRows += "<img src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_ASN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_ASN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "<td width='60px' class='handP'>";
+                        if (val.STAT_GRN == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_GRN == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_GRN == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_GRN == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#PO_ITEM_SEARCH").attr('placeholder', 'Search in ' + count + ' rows');
+                $("#PO_ITEMS").replaceWith(tmpRows);
+                getPayments();
+            }
+
+            var dataRec = { "SRCH_VAL": SEARCH_VAL }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    $("#PO_PYMT_SEARCH").keyup(function (e) {
+        try {
+            var SEARCH_VAL = $("#PO_PYMT_SEARCH").val();
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchPOPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_PYMTS' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Date</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Paid</th>";
+                tmpRows += "<th   aria-label='Phone: '>Status</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.INV + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.INV_DT) + "</td>";
+                        tmpRows += "<td>" + val.INV_AMT + "</td>";
+                        tmpRows += "<td>" + val.INV_PAID + "</td>";
+                        tmpRows += "<td width='60px'>";
+                        if (val.STAT_PYMT == 0) {
+                            tmpRows += "<img class='handP' src='/assets/img/not_progressed.png' title='Not Progressed' />";
+                        }
+                        else if (val.STAT_PYMT == 1) {
+                            tmpRows += "<img class='handP' src='/assets/img/partial.png' title='Partially Completed' />";
+                        }
+                        else if (val.STAT_PYMT == 2) {
+                            tmpRows += "<img class='handP' src='/assets/img/completed.png' title='Completed' />";
+                        }
+                        else if (val.STAT_PYMT == 3) {
+                            tmpRows += "<img class='handP' src='/assets/img/cancelled.png' title='Cancelled' />";
+                        }
+                        tmpRows += "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#PO_PYMT_SEARCH").attr('placeholder', 'Search in ' + count + ' rows');
+                $("#PO_PYMTS").replaceWith(tmpRows);
+            }
+
+            var dataRec = { "SRCH_VAL": SEARCH_VAL }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    function ConvertJsonDateString(jsonDate) {
+        var shortDate = null;
+        if (jsonDate) {
+            var regex = /-?\d+/;
+            var matches = regex.exec(jsonDate);
+            var dt = new Date(parseInt(matches[0]));
+            var month = dt.getMonth() + 1;
+            var monthString = month > 9 ? month : '0' + month;
+            var day = dt.getDate();
+            var dayString = day > 9 ? day : '0' + day;
+            var year = dt.getFullYear();
+            if (year != 1)
+                shortDate = monthString + '/' + dayString + '/' + year;
+            else
+                shortDate = "";
+        }
+        return shortDate;
+    };
+</script>

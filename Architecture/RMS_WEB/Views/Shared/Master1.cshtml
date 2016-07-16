@@ -1,0 +1,727 @@
+﻿@{
+    var Cookie_Inf = RMS_WEB.Controllers.cookieInfo.GetUserInfo(System.Web.HttpContext.Current.Request);
+    string email = "";
+    string userid = "";
+    string mobile = "";
+    string last_logon = "";
+    string name = "";
+    string addr1 = "", addr2 = "";
+    string city = "", region = "";
+    string country = "", pincode = "";
+    string mail1 = "", mail2 = "";
+    string phone1 = "", phone2 = "";
+
+    if (Cookie_Inf.USERID != null && Cookie_Inf.USERID != "")
+    {
+        email = Cookie_Inf.EMAIL;
+        name = Cookie_Inf.NAME;
+        userid = Cookie_Inf.USERID;
+        mobile = Cookie_Inf.MOBILE;
+        last_logon = Cookie_Inf.LAST_LOGON;
+        addr1 = Cookie_Inf.ADDR1;
+        addr2 = Cookie_Inf.ADDR2;
+        city = Cookie_Inf.CITY;
+        region = Cookie_Inf.REGION;
+        country = Cookie_Inf.COUNTRY;
+        pincode = Cookie_Inf.PINCODE;
+        mail1 = Cookie_Inf.MAIL1;
+        mail2 = Cookie_Inf.MAIL2;
+        phone1 = Cookie_Inf.PHONE1;
+        phone2 = Cookie_Inf.PHONE2;
+    }
+    else
+    {
+        Response.Redirect("~/Login");
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Meta information -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <!-- Title-->
+    <title>@ViewBag.Title</title>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="@Url.Content("~/assets/ico/apple-touch-icon-144-precomposed.png")">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="@Url.Content("~/assets/ico/apple-touch-icon-114-precomposed.png")">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="@Url.Content("~/assets/ico/apple-touch-icon-72-precomposed.png")">
+    <link rel="apple-touch-icon-precomposed" href="@Url.Content("~/assets/ico/apple-touch-icon-57-precomposed.png")">
+    <link rel="shortcut icon" href="@Url.Content("~/assets/ico/favicon.png")">
+
+    <!-- CSS Stylesheet-->
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/bootstrap/bootstrap.min.css")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/themes/themes.css")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/style.css")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/jquery.jqChart.css")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/jquery.jqRangeSlider.css")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/jquery.ui-1.10.4.css")" />
+    <script src='@Url.Content("~/Scripts/jquery-1.11.1.min.js")'></script>
+    <script src='@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")'></script>
+
+</head>
+<body>
+
+    <div id="wrapper">
+        <!--
+	        /////////////////////////////////////////////////////////////////////////
+	        //////////     HEADER  CONTENT     ///////////////
+	        //////////////////////////////////////////////////////////////////////
+	        -->
+        <div id="header">
+
+            <div class="tools-bar">
+                <ul class="nav navbar-nav nav-main-xs">
+                    <li><a href="#menu" class="icon-toolsbar"><i class="fa fa-bars"></i></a></li>
+                </ul>
+                @*<ul class="nav navbar-nav navbar-left nav-main-xs">
+				        <li><a href="#menu" class="icon-toolsbar"><i class="fa fa-bars"></i></a></li>
+			        </ul>*@
+                <ul class="nav navbar-nav tooltip-area">
+                    <li class="tooltip-area"><a href="#" class="nav-collapse avatar-header" @*data-toggle="tooltip" title="Show / hide  menu"*@ data-container="body" data-placement="bottom">
+                        <img alt="" src="/assets/img/avatar.png" class="circle">
+                        @*<span class="badge">3</span>*@
+                    </a>
+                    </li>
+                    @*<li class="visible-lg">
+                        <a href="#" class="h-seperate fullscreen" data-toggle="tooltip" title="Full Screen" data-container="body" data-placement="left">
+                            <i class="fa fa-expand"></i>
+                        </a>
+                    </li>*@
+                    <li class="dropdown" style="margin-top: 5px;">
+                        <em style="padding: 15px; color: #00008B">Welcome</em>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" style="line-height: 20px;">
+                            <em>@name</em> <i class="dropdown-icon fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right icon-right arrow">
+                            <li><a href="#" onclick="openProfile()"><i class="fa fa-user"></i>Profile</a></li>
+                            <li><a href="../Login/ResetPassword"><i class="fa fa-wrench"></i>Reset Password</a></li>
+                            <li><a href="../Login/SignOut"><i class="fa fa-sign-out"></i>Signout </a></li>
+                        </ul>
+                        <!-- //dropdown-menu-->
+                    </li>
+                    <li>
+                        <a href="#" title="Messages">
+                            <i class="glyphicon glyphicon-flag" style="color: green;"></i>
+                            <label for="Completed" style="color: green;">(0)</label>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="Quality rejection">
+                            <i class="glyphicon glyphicon-flag" style="color: red;"></i>
+                            <label for="Rejects" style="color: red;">(0)</label>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- //tools-bar-->
+            <div class="logo-area clearfix" style="float: right;">
+                <a href="#" class="logo"></a>
+            </div>
+            <!-- //logo-area-->
+            @*<div style="position:relative"><span style="display:inline-block; position:absolute; left:50%; top:15px; padding:5px; margin-left:25px; font-weight:bold;" > @org_name </span></div>*@
+        </div>
+        <!-- //header-->
+
+        <!--
+	        /////////////////////////////////////////////////////////////////////////
+	        //////////     SLIDE LEFT CONTENT     //////////
+	        //////////////////////////////////////////////////////////////////////
+	        -->
+
+        <!-- //nav-->
+        <div id="nav">
+            <div id="nav-scroll">
+                <div class="avatar-slide">
+                    <span class="avatar-chart" data-percent="0">
+                        @*<span class="percent"></span>*@
+                        <img alt="" src="/assets/img/avatar.png" class="circle">
+                    </span>
+                    <!-- //avatar-chart-->
+
+                    <div class="avatar-detail">
+                        <p><strong>Welcome</strong>, @name</p>
+                        <p><a>@mobile , @last_logon</a></p>
+                        <p><a>@addr1,</a></p>
+                        <p><a>@addr2,</a></p>
+                        <p><a>@city - @pincode</a></p>
+                        <p><a>@region , @country</a></p>
+                        @*<span>12,110 Sales</span>
+					        <span>106 Follower</span>*@
+                    </div>
+                    <!-- //avatar-detail-->
+
+                    <div class="avatar-link btn-group btn-group-justified">
+                        <a class="btn custom-btn" title="Portfolio"><i class="fa fa-briefcase"></i></a>
+                        <a class="btn custom-btn" data-toggle="modal" href="#md-notification" title="Messages">
+                            <i class="fa fa-envelope-o"></i><em class="green"></em>
+                        </a>
+                        <a class="btn custom-btn" data-toggle="modal" href="#md-messages" title="Quality rejection">
+                            <i class="fa fa-bell-o"></i><em class="active"></em>
+                        </a>
+                        <a href="../Mail" class="btn custom-btn" title="Contact List"><i class="fa fa-book"></i></a>
+                    </div>
+                    <!-- //avatar-link-->
+
+                </div>
+                <!-- //avatar-slide-->
+
+                <div class="widget-collapse dark">
+                    <header>
+                        <a data-toggle="collapse" href="#collapseTasks"><i class="collapse-caret fa fa-angle-down"></i>My Applications</a>
+                    </header>
+                    <section class="collapse" id="collapseTasks">
+
+                        <div class="collapse-boby">
+
+                            <div class="widget-slider">
+                                <a href="~/Purchase/Queries" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>My Queries</a>
+                                <a href="~/ASN" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Create ASN</a>
+                                <a href="~/Purchase" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>PO Lookup</a>
+                                <a href="~/ASN/FMS" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>FMS-Bill Booking</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Order Acknowledgement</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Payments & Invoices</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Credit Notes</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Payment History</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Dispute Management</a>
+                            </div>
+                            <!-- //widget-slider-->
+
+                        </div>
+                        <!-- //collapse-boby-->
+
+                    </section>
+                    <!-- //collapse-->
+                </div>
+                <!-- //widget-collapse-->
+
+                <div class="widget-collapse dark">
+                    <header>
+                        <a data-toggle="collapse" href="#collapseSummary"><i class="collapse-caret fa fa-angle-down"></i>New Requests</a>
+                    </header>
+                    <section class="collapse" id="collapseSummary">
+
+                        <div class="collapse-boby">
+
+                            <div class="widget-slider">
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Address Detail Change Request</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Contact Person Change Request</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Bank Details Change Request</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Payment Terms Change Request</a>
+                                <a href="#" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Vendor Unlock Request</a>
+                            </div>
+                            <!-- //widget-slider-->
+
+                        </div>
+                        <!-- //collapse-boby-->
+
+                    </section>
+                    <!-- //collapse-->
+                </div>
+                <!-- //widget-collapse-->
+
+                <div class="widget-collapse dark">
+                    <header>
+                        <a data-toggle="collapse" href="#collapseSetting"><i class="collapse-caret fa fa-angle-down"></i>Reports</a>
+                    </header>
+                    <section class="collapse" id="collapseSetting">
+
+                        <div class="collapse-boby">
+
+                            <div class="widget-slider">
+                                <a href="../Purchase/InvoicePaymentReport" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Invoice Payment Report</a>
+                                <a href="../Purchase/POPaymentReport" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>PO Payment Report</a>
+                                <a href="../Purchase/VendorPaymentReport" class="appln-items"><i class="fa fa-briefcase" style="padding-right: 15px;"></i>Vendor Payment Report</a>
+                            </div>
+                            <!-- //widget-slider-->
+
+                        </div>
+                        <!-- //collapse-boby-->
+
+                    </section>
+                    <!-- //collapse-->
+                </div>
+                <!-- //widget-collapse-->
+
+            </div>
+            <!-- //nav-scroller-->
+        </div>
+
+        <!--
+	        /////////////////////////////////////////////////////////////////////////
+	        //////////     MAIN SHOW CONTENT     //////////
+	        //////////////////////////////////////////////////////////////////////
+	        -->
+
+        <!-- //main-->
+
+        <div>
+            <div id="main">
+                <div id="dvLoading"></div>
+                @RenderBody()
+            </div>
+        </div>
+
+
+        <!--
+	        //////////////////////////////////////////////////////////////
+	        //////////     LEFT NAV MENU     //////////
+	        ///////////////////////////////////////////////////////////
+	        -->
+        <nav id="menu">
+            <ul>
+                <li class="menu-item">
+                    <a href="~/Dashboard"><i class="icon fa fa-laptop"></i>Dashboard </a>
+                </li>
+                <li class="menu-item">
+                    <a href="~/Purchase"><i class="icon fa fa-calendar-o"></i>PO </a>
+                </li>
+                <li class="menu-item">
+                    <a href="~/ASN"><i class="icon fa fa-file-text"></i>ASN </a>
+                </li>
+                <li class="menu-item">
+                    <a href="~/Purchase/VendorInvoice"><i class="icon fa fa-align-right"></i>Invoice </a>
+                </li>
+                <li class="menu-item">
+                    <a href="~/Purchase/Queries"><i class="icon fa fa-file-text"></i>Queries </a>
+                </li>
+                <li class="menu-item">
+                    <a href="~/Purchase/GatePass"><i class="icon fa fa-align-right"></i>Gate Pass </a>
+                </li>
+                @*<li><span><i class="icon  fa fa-bar-chart-o"></i> Reports</span>
+				    <ul>
+					    <li><a href="#"> Payment Vendor Report </a></li>
+					    <li><a href="#"> Payment Invoice Report </a></li>
+					    <li><a href="#"> Payment PO Report </a></li>
+				    </ul>
+			    </li>*@
+                @*<li><span><i class="icon  fa fa-briefcase"></i> Organization</span>
+				        <ul>
+					        <li><a href="~/Organization"> Organization </a></li>
+					        <li><a href="~/Company"> Company </a></li>
+					        <li><a href="~/Branch"> Branch </a></li>
+				        </ul>
+			        </li>*@
+
+            </ul>
+        </nav>
+        <!-- //nav left menu-->
+
+    </div>
+    <!-- //wrapper-->
+
+</body>
+
+<!--
+        ////////////////////////////////////////////////////////////////////////
+        //////////     JAVASCRIPT  LIBRARY     //////////
+        /////////////////////////////////////////////////////////////////////
+        -->
+
+<!-- Jquery Library -->
+<script type="text/javascript" src="@Url.Content("~/assets/js/jquery.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/assets/js/jquery.ui.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/bootstrap/bootstrap.min.js")"></script>
+
+<!-- Modernizr Library For HTML5 And CSS3 -->
+<script type="text/javascript" src="@Url.Content("~/assets/js/modernizr/modernizr.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/mmenu/jquery.mmenu.js")"></script>
+<!-- Holder Images -->
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/holder/holder.js")"></script>
+<!-- Form plugins -->
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/form/form.js")"></script>
+<!-- Datetime plugins -->
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/datetime/datetime.js")"></script>
+<!-- Library Chart-->
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/chart/chart.js")"></script>
+<!-- Library Themes Customize-->
+<script type="text/javascript" src="@Url.Content("~/assets/js/caplet.custom.js")"></script>
+
+<!-- Library datable -->
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/datable/jquery.dataTables.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/assets/plugins/datable/dataTables.bootstrap.js")"></script>
+<!-- Library Graph -->
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/excanvas.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.flot.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.mousewheel.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.jqChart.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.jqRangeSlider.min.js")"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        if ($.browser.msie && parseInt($.browser.version, 10) === 6) { $('.row div[class^="span"]:last-child').addClass("last-child"); $('[class*="span"]').addClass("margin-left-20"); $('[class*="span"][class*="offset"]').removeClass('margin-left-20'); $(':button[class="btn"], :reset[class="btn"], :submit[class="btn"], input[type="button"]').addClass("button-reset"); $(":checkbox").addClass("input-checkbox"); $('[class^="icon-"], [class*=" icon-"]').addClass("icon-sprite"); $(".pagination li:first-child a").addClass("pagination-first-child") }
+    });
+
+    $(function () {
+
+        //setTimeout(function () { $.notific8('My notification message goes here.') }, 500);
+
+        $(".notific").on('click', function () {
+            var nclick = $(this), data = nclick.data();
+            data.verticalEdge = data.vertical || 'right';
+            data.horizontalEdge = data.horizontal || 'top';
+            $.notific8("Notification message goes here...", data);
+        });
+    });
+
+    function ShowLoadImage() {
+        $("#dvLoading").show();
+    }
+    function HideLoadImage() {
+        $("#dvLoading").hide();
+    }
+
+    jQuery(document).ready(function ($) {
+
+        function fnShowHide(iCol, table) {
+            var oTable = $(table).dataTable();
+            var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+            oTable.fnSetColumnVis(iCol, bVis ? false : true);
+        }
+
+        $(function () {
+
+            //////////     DATA TABLE  COLUMN TOGGLE    //////////
+            $('[data-table="table-toggle-column"]').each(function (i) {
+                var data = $(this).data(),
+                table = $(this).data("table-target"),
+                dropdown = $(this).parent().find(".dropdown-menu"),
+                col = new Array;
+                $(table).find("thead th").each(function (i) {
+                    $("<li><a  class='toggle-column' href='javascript:void(0)' onclick=fnShowHide(" + i + ",'" + table + "') ><i class='fa fa-check'></i> " + $(this).text() + "</a></li>").appendTo(dropdown);
+                });
+            });
+
+            //////////     COLUMN  TOGGLE     //////////
+            $("a.toggle-column").on('click', function () {
+                $(this).toggleClass("toggle-column-hide");
+                $(this).find('.fa').toggleClass("fa-times");
+            });
+
+            // Call dataTable in this page only
+            $('.myDataTable').dataTable();
+            //$('#table-example').dataTable();
+            $('table[data-provide="data-table"]').dataTable();
+        });
+
+        $("#STATE").bind('keyup', function (e) {
+            if (e.which >= 97 && e.which <= 122) {
+                var newKey = e.which - 32;
+                // I have tried setting those
+                e.keyCode = newKey;
+                e.charCode = newKey;
+            }
+
+            $("#STATE").val(($("#STATE").val()).toUpperCase());
+        });
+        $("#AREA").bind('keyup', function (e) {
+            if (e.which >= 97 && e.which <= 122) {
+                var newKey = e.which - 32;
+                // I have tried setting those
+                e.keyCode = newKey;
+                e.charCode = newKey;
+            }
+
+            $("#AREA").val(($("#AREA").val()).toUpperCase());
+        });
+
+        // limit the characters
+        $("#STATE").keyup(function () {
+            var text = $(this).val();
+            var textLength = text.length;
+            if (textLength == 2)
+                $("#DISTRICT").focus();
+            if (textLength > 2) {
+                $(this).val(text.substring(0, (2)));
+            }
+        });
+        $("#DISTRICT").keyup(function () {
+            var text = $(this).val();
+            var textLength = text.length;
+            if (textLength == 2)
+                $("#AREA").focus();
+            if (textLength > 2) {
+                $(this).val(text.substring(0, (2)));
+            }
+        });
+        $("#AREA").keyup(function () {
+            var text = $(this).val();
+            var textLength = text.length;
+            if (textLength == 2)
+                $("#NO").focus();
+            if (textLength > 2) {
+                $(this).val(text.substring(0, (2)));
+            }
+        });
+        $("#NO").keyup(function () {
+            var text = $(this).val();
+            var textLength = text.length;
+            if (textLength > 4) {
+                $(this).val(text.substring(0, (4)));
+            }
+        });
+    });
+    $('#ui-menu-item')
+    {
+        innerHeight = "50px";
+        innerWidth = "50px";
+    }
+    $("#nav").ready(
+        function () {
+            $("a.nav-collapse").click();
+            $("a.nav-collapse").click();
+            $("a.nav-collapse").click();
+        });
+
+    function ajaxCall(strURL, dataRecord, callBack) {
+        $.ajax({
+            url: strURL,
+            type: 'POST',
+            data: JSON.stringify(dataRecord),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data, textStatus, jqXHR) {
+                try {
+                    callBack(eval(data));
+                }
+                catch (ex) {
+                    alert(ex);
+                }
+            },
+            error: function (jqXHR, exception) {
+                if (jqXHR.status === 0) {
+                    alert('Not connect.\n Verify Network.');
+                } else if (jqXHR.status == 404) {
+                    alert('Requested page not found. [404]');
+                } else if (jqXHR.status == 500) {
+                    alert('Internal Server Error [500].');
+                } else if (exception === 'parsererror') {
+                    alert('Requested JSON parse failed.');
+                } else if (exception === 'timeout') {
+                    alert('Time out error.');
+                } else if (exception === 'abort') {
+                    alert('Ajax request aborted.');
+                } else {
+                    alert('Uncaught Error.\n' + jqXHR.responseText);
+                }
+            },
+            failure: function (jqXHR, exception) {
+                if (jqXHR.status === 0) {
+                    alert('Not connect.\n Verify Network.');
+                } else if (jqXHR.status == 404) {
+                    alert('Requested page not found. [404]');
+                } else if (jqXHR.status == 500) {
+                    alert('Internal Server Error [500].');
+                } else if (exception === 'parsererror') {
+                    alert('Requested JSON parse failed.');
+                } else if (exception === 'timeout') {
+                    alert('Time out error.');
+                } else if (exception === 'abort') {
+                    alert('Ajax request aborted.');
+                } else {
+                    alert('Uncaught Error.\n' + jqXHR.responseText);
+                }
+            }
+        });
+    }
+    function openProfile() {
+        $("a.nav-collapse").click();
+    }
+    function customRadio(radioName) {
+        var radioButton = $('input[name="' + radioName + '"]');
+        $(radioButton).each(function () {
+            $(this).wrap("<span class='custom-radio'></span>");
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+            //if ($(this).val() == "PO1") {
+            //    $(this).parent().addClass("selected");
+            //}
+            if (radioName == "IS_ADV_PYMT") {
+                if ($(this).val() == "false")
+                    $(this).parent().addClass("selected");
+            }
+        });
+        $(radioButton).click(function () {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+            $(radioButton).not(this).each(function () {
+                $(this).parent().removeClass("selected");
+            });
+        });
+    }
+    function customRadioRight(radioName) {
+        var radioButton = $('input[name="' + radioName + '"]');
+        $(radioButton).each(function () {
+            $(this).wrap("<span class='custom-radio' style='margin-left:5px;'></span>");
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+            if ($(this).val() == "Inbound") {
+                $(this).parent().addClass("selected");
+            }
+        });
+        $(radioButton).click(function () {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+            $(radioButton).not(this).each(function () {
+                $(this).parent().removeClass("selected");
+            });
+        });
+    }
+    function customAck(checkboxName) {
+        var chechBox = $('input[name="' + checkboxName + '"]');
+        $(chechBox).each(function () {
+            $(this).wrap("<span class='custom-selectBox'></span>");
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+        });
+        $(chechBox).click(function () {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+            $(chechBox).not(this).each(function () {
+                $(this).parent().removeClass("selected");
+            });
+        });
+    }
+    function custompaperClip(checkboxName) {
+        var chechBox = $('input[name="' + checkboxName + '"]');
+        $(chechBox).each(function () {
+            $(this).wrap("<span class='custom-paperClip'></span>");
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+        });
+        $(chechBox).click(function () {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+            $(chechBox).not(this).each(function () {
+                $(this).parent().removeClass("selected");
+            });
+        });
+    }
+    function customCheckbox(checkboxName) {
+        var checkBox = $('input[name="' + checkboxName + '"]');
+        $(checkBox).each(function () {
+            $(this).wrap("<span class='custom-checkbox'></span>");
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+        });
+        $(checkBox).click(function () {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass("selected");
+            }
+            $(chechBox).not(this).each(function () {
+                $(this).parent().removeClass("selected");
+            });
+        });
+    }
+    function customCheck(checkboxName) {
+        var checkBox1 = $('input[name="' + checkboxName + '"]');
+        $(checkBox1).each(function () {
+            if ($(this).is(':checked')) {
+                $(this).addClass("selected");
+            }
+        });
+        $(checkBox1).click(function () {
+            if ($(this).is(':checked')) {
+                $(this).addClass("selected");
+            }
+            else {
+                $(this).removeClass("selected");
+            }
+        });
+    }
+    $('.NumberTextBox').focusout(function () {
+        if ($(this).val() == '') {
+            $(this).val('0');
+        }
+    });
+
+    $('.NumberTextBox').focusin(function () {
+        if ($(this).val() == '0') {
+            $(this).val('');
+        }
+    });
+
+    $('.NumberQty').focusout(function () {
+        if ($(this).val() == '') {
+            $(this).val('0');
+        }
+    });
+
+    $('.NumberQty').focusin(function () {
+        if ($(this).val() == '0') {
+            $(this).val('1');
+        }
+    });
+    //validation
+    function Numbervalidation(PRDT_QTY) {
+        var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+
+        if (numberRegex.test(PRDT_QTY)) {
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    $(document).ready(initPage);
+
+    function initPage() {
+
+        getMessageCount();
+    }
+
+    function getMessageCount() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Dashboard/GetCounts";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var comp, rej;
+                $(dataRecord).each(function (i, dat) {
+                    if (dat.IS_SUCCESS) {
+
+                        comp = dat.COMPLETED;
+                        rej = dat.REJECTED;
+                    }
+                    else {
+                        //Message(dat.RESPONSE_MESSAGE, dat.IS_SUCCESS);
+                    }
+
+                });
+                jQuery("label[for='Completed']").html('(' + comp + ')');
+                jQuery("label[for='Rejects']").html('(' + rej + ')');
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+
+    }
+</script>
+</html>
+
+@if (IsSectionDefined("MyScript"))
+{
+    @RenderSection("MyScript");
+}

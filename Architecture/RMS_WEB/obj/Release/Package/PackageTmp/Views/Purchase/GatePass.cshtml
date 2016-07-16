@@ -1,0 +1,388 @@
+﻿@model RMS_WEB.Models.PurchaseOrderModel
+@{
+    ViewBag.Title = "Gate Pass";
+    Layout = "~/Views/Shared/Master1.cshtml";
+    var userid = RMS_WEB.Controllers.cookieInfo.GetUserInfo(System.Web.HttpContext.Current.Request).USERID;
+}
+<div>
+    <ol class="breadcrumb">
+        <li><a href="../Dashboard">Dashboard</a></li>
+        <li><a href="../Purchase/GatePass">GatePass</a></li>
+        <a href="#" style="float: right; font-size: 20px;"><i class="fa fa-question-circle"></i></a>
+    </ol>
+    <!-- //breadcrumb-->
+    	
+        <div id="content">
+            <div class="row">
+                <table width="80%">
+                    <input type="hidden" id="USER" value="@userid"/>
+                    <tr class="bgC">
+                        <td>
+                            <label class="control-label" style="padding-top:5px; margin-left:10px;">Gate Pass</label>
+                        </td>       
+                        <td>
+                            <label class="custom-label" style="float:right;">Inbound<input type="radio" class="TRANS_TYP" name="INBOUND" value="Inbound"/></label>
+                        </td>
+                        <td>
+                            <label class="custom-label" style="float:left;">Outbound<input type="radio" class="TRANS_TYP" name="INBOUND" value="Outbound"/></label>
+                        </td>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            <a href="#" style="float:right; margin-right:20px;">View Gate Entries</a>
+                            <a href="#" style="float:right; margin-right:20px;">View Gate Exit Dues</a>                            
+                        </td>               
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Reference</label>
+                        </td>
+                        <td>                        
+                            <select class="form-control query-row" id="TPROCESS" name="TPROCESS" data-size="10" data-live-search="true" style="width:150px;">
+                                <option class="SelectProcess" value="Select Process">Select Process</option>
+                                <option class="SelectProcess" value="IN-PO Reference">IN-PO Reference</option>
+                                <option class="SelectProcess" value="IN-Non PO Reference">IN-Non PO Reference</option>
+                                <option class="SelectProcess" value="IN-Contractor Returnable / Non Returnable">IN-Contractor Returnable / Non Returnable</option>
+                                <option class="SelectProcess" value="IN-Company Return Receipt">IN-Company Return Receipt</option>
+                            </select><!-- //Live Dropdown-->
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Vehicle No.</label>                            
+                        </td>
+                        <td>
+                            <input type="text" id="STATE" name="STATE" class="form-control-alt query-row" value="" style="width: 30px;" />
+                            <input type="text" id="DISTRICT" name="DISTRICT" class="form-control-alt query-row" value="" style="width: 30px;" />
+                            <input type="text" id="AREA" name="AREA" class="form-control-alt query-row" value="" style="width: 30px;" />
+                            <input type="text" id="NO" name="NO" class="form-control-alt query-row" value="" style="width: 50px;" />
+                        </td>
+                        <td>
+                            <label class="control-label custom-label-alt">Gate In</label> 
+                            <select class="form-control-alt query-row GATE_IN" id="GATE_IN_NO" name="GATE_IN_NO" data-size="10" data-live-search="true" style="width:100px;">
+                                <option value="Truck">Truck</option>
+                                <option value="Courier">Courier</option>
+                                <option value="By Hand">By Hand</option>
+                            </select><!-- //Live Dropdown-->
+                            <label class="control-label custom-label-alt" style="margin-left:10px;">Gate Exit</label>   
+                            <select class="form-control-alt query-row GATE_IN" id="GATE_OUT_NO" name="GATE_OUT_NO" data-size="10" data-live-search="true" style="width:100px;">
+                                <option value="Truck">Truck</option>
+                                <option value="Courier">Courier</option>
+                                <option value="By Hand">By Hand</option>
+                            </select><!-- //Live Dropdown--> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Transport Mode</label>
+                        </td>
+                        <td>
+                            <select class="form-control query-row GATE_IN" id="TMODE" name="TMODE" data-size="10" data-live-search="true" style="width:150px;">
+                                <option value="Truck">Truck</option>
+                                <option value="Courier">Courier</option>
+                                <option value="By Hand">By Hand</option>
+                            </select><!-- //Live Dropdown-->
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Driver</label>                            
+                        </td>
+                        <td>
+                            <input type="text" id="DRIVER" name="DRIVER" class="form-control query-row GATE_IN" value="" placeholder="Driver" style="width: 150px;" />
+                        </td>
+                        <td>
+                            <img src="~/assets/img/calendar.png"/>
+                            <input id="GATE_IN_DT" name="GATE_IN_DT" type="text" class="form-control-alt query-row GATE_IN" style="width: 150px;" />
+                            <input id="GATE_OUT_DT" name="GATE_OUT_DT" type="text" class="form-control-alt query-row" style="width: 150px;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Challan No.</label>
+                        </td>
+                        <td>
+                            <input id="CHALLAN_NO" name="CHALLAN_NO" type="text" class="form-control query-row" placeholder="Challan no" style="width: 150px;" />
+                        </td>
+                        
+                        <td>
+                            <label class="control-label custom-label">DL No.</label>                            
+                        </td>
+                        <td>
+                            <input type="text" id="DL_NO" name="DL_NO" class="form-control query-row GATE_IN" value="" placeholder="DL NO." style="width: 150px;" />
+                        </td>
+                        <td>
+                            <img src="~/assets/img/security.png"/>
+                            <input type="text" id="GATE_IN_BY" name="GATE_IN_BY" class="form-control-alt query-row GATE_IN" value="" placeholder="Gate In By" style="width: 150px;" />
+                            <input type="text" id="GATE_OUT_BY" name="GATE_OUT_BY" class="form-control-alt query-row" value="" placeholder="Gate Out By" style="width: 150px;" />
+                        </td>  
+                    </tr>
+                    <tr class="GATE_OUT">
+                        <td>
+                            <label class="control-label custom-label">Challan Date</label>
+                        </td>
+                        <td>
+                            <input id="CHALLAN_DT" name="CHALLAN_DT" type="text" class="input-group date form_datetime form-control query-row" data-date-format="mm/dd/yyyy" placeholder="Date" style="width: 150px;" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- //content > row-->
+            <div class="row" id="PASS_ITEMS" class="PASS_ITEMS">
+                <table width="80%" style="margin-top:20px;">
+                    <tr class="bgC">
+                        <td>
+                            <label class="control-label" style="padding-top:5px; margin-left:10px;">Item Details</label>
+                        </td> 
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>       
+                        <td>
+
+                        </td>  
+                        <td style="width:350px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="display: inline-flex;">
+                            <input type="text" id="PO_S" name="PO_S" class="custom-label-dec row-1px" value="" placeholder="Select PO" readonly="true" style="width:120px;" />
+                            <a class="query-row" href="#" onclick="openPO()" title="PO Lookup" style="background-image:url('/assets/img/small_icon.png'); background-repeat:no-repeat; padding-left:5px; padding-right:7px; padding-bottom:5px; margin-bottom:5px; font-size: 20px; "><i class="fa fa-paperclip"></i></a>
+                        </td>
+                        <td>
+                            <label id="POITEM" class="control-label custom-label" style="width:200px;">Item</label>
+                        </td>                        
+                        <td>
+                            <label id="MATERIAL" class="control-label custom-label" style="width:200px;">Material</label>
+                        </td>                        
+                        <td>
+                            <label id="MTEXT" class="control-label custom-label" style="width:200px;">Description</label>
+                        </td>
+                        <td style="width:350px;">
+                            <input type="hidden" value="1" />
+                        </td>
+                    </tr>
+                </table>
+                <table style="width:80%">
+                    <tr style="float:right; margin-right:20px;">
+                        <td>
+                            <div class='error PASS_INFO'></div>
+                        </td>
+                        <td>
+                            <input type="button" onclick="ClearItem()" id="CANCEL1" class="btn btn-theme" value="CANCEL" style="margin-left: 5px; min-width: 150px; max-width: 150px; float: left;" />
+                        </td>
+                        <td>
+                            <input type="button" onclick="CreateItem()" id="SUBMIT1" class="btn btn-theme" value="SUBMIT" style="margin-left: 5px; min-width: 150px; max-width: 150px; float: left;" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- //content > row-->
+        </div>
+        <!-- //content-->
+    
+</div>
+<script>
+    $(document).ready(function () {
+        if ($("#GATE_IN_DT").val() == '') {
+            $("#GATE_IN_DT").val(GetDateTime());
+        }
+        if ($("#GATE_OUT_DT").val() == '') {
+            $("#GATE_OUT_DT").val(GetDateTime());
+        }
+        if ($("#CHALLAN_DT").val() == '') {
+            $("#CHALLAN_DT").val(GetDate());
+        }
+        
+        GetPOs();
+        $(function () {
+            $(".TRANS_TYP").click(function () {
+                var selection = $("input[name=INBOUND]:checked").val();
+                if (selection === "Inbound") {
+                    var tmpRows = "";
+                    tmpRows += "<select class='form-control query-row' id='TPROCESS' name='TPROCESS' data-size='10' data-live-search='true' style='width:150px;'>";
+                    tmpRows += "<option class='SelectProcess' value='Select Process'>Select Process</option>";
+                    tmpRows += "<option class='SelectProcess' value='IN-PO Reference'>IN-PO Reference</option>";
+                    tmpRows += "<option class='SelectProcess' value='IN-Non PO Reference'>IN-Non PO Reference</option>";
+                    tmpRows += "<option class='SelectProcess' value='IN-Contractor Returnable / Non Returnable'>IN-Contractor Returnable / Non Returnable</option>";
+                    tmpRows += "<option class='SelectProcess' value='IN-Company Return Receipt'>IN-Company Return Receipt</option>";
+                    tmpRows += "</select>";
+                    $("#TPROCESS").replaceWith(tmpRows);
+                }
+                else if (selection === "Outbound") {
+                    var tmpRows = "";
+                    tmpRows += "<select class='form-control query-row' id='TPROCESS' name='TPROCESS' data-size='10' data-live-search='true' style='width:150px;'>";
+                    tmpRows += "<option class='SelectProcess' value='Select Process'>Select Process</option>";
+                    tmpRows += "<option class='SelectProcess' value='Out-Del.Reference'>Out-Del.Reference</option>";
+                    tmpRows += "<option class='SelectProcess' value='Out-Company Returnable'>Out-Company Returnable</option>";
+                    tmpRows += "<option class='SelectProcess' value='Out-Contractor Returnable'>Out-Contractor Returnable</option>";
+                    tmpRows += "</select>";
+                    $("#TPROCESS").replaceWith(tmpRows);
+                }
+            });
+        });
+        customRadioRight("INBOUND");
+    });
+    function check(uiObj) {
+        var VA = $(uiObj).val();
+        alert(VA);
+    }
+    function GetPOs() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetAllPOs";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpPO = "<option class='SelectPO' selected='selected' value='Select PO' > Select PO </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        tmpPO += "<option  class='SelectPO' value='" + val.PO + "'>" + val.PO + "</option>"
+                    }
+                });
+
+                $(".SelectPO").replaceWith(tmpPO);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetDateTime() {
+        var fullDate = new Date();
+        var twoDigitMonth = ((fullDate.getMonth() + 1) > 9) ? (fullDate.getMonth() + 1) : '0' + (fullDate.getMonth() + 1);
+        var ap;
+        if (fullDate.getHours() >= 12) {
+            ap = " pm";
+        }
+        else {
+            ap = " am";
+        }
+        var h;
+        if (fullDate.getHours() > 12) {
+            h = fullDate.getHours() - 12;
+        }
+        else {
+            h = fullDate.getHours();
+        }
+        var tm = (h <= 9 ? '0' + h : h) + ":" + (fullDate.getMinutes() <= 9 ? '0' + fullDate.getMinutes() : fullDate.getMinutes());
+        var currentDate = twoDigitMonth + "/" + fullDate.getDate() + "/" + fullDate.getFullYear() + " " + tm + ap;
+        return currentDate;
+    }
+    function GetDate() {
+        var fullDate = new Date();
+        var twoDigitMonth = ((fullDate.getMonth() + 1) > 9) ? (fullDate.getMonth() + 1) : '0' + (fullDate.getMonth() + 1);
+        var currentDate = twoDigitMonth + "/" + fullDate.getDate() + "/" + fullDate.getFullYear();
+        return currentDate;
+    }
+    function ClearGatePass() {
+        $("#TTYPE").val("Select Type");
+        $("#TPROCESS").val("Select Process");
+        $("#TMODE").val("Select Mode");
+        $("#TVENDOR").val("");
+        $("#PLANT").val("");
+        $("#VEHICLE_NO").val("");
+        $("#DRIVER").val("");
+        $("#DL_NO").val("");
+        $("#GATE_IN_NO").val("");
+        $("#GATE_IN_BY").val("");
+        $("#GATE_IN_DT").val("");
+        $("#GATE_IN_TIME").val(GetTime());
+    }
+    function CreateGatePass() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/CreateGatePassIn";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmp;
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        ClearGatePass();
+                        tmp = "<div class='success GP_CRTD' style='margin-right: 20px;'><span id='error1'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    else {
+                        tmp = "<div class='error GP_CRTD' style='margin-right: 20px;'><span id='error1'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    $(".GP_CRTD").replaceWith(tmp);
+                });
+            }
+
+            var dataRec = {
+                "USERID": $("#USER").val(),
+                "TTYPE": $("#TTYPE option:selected").text(),
+                "TPROCESS": $("#TPROCESS option:selected").text(),
+                "TMODE": $("#TMODE option:selected").text(),
+                "TVENDOR": $("#TVENDOR").val(),
+                "VEHICLE_NO": $("#VEHICLE_NO").val(),
+                "DRIVER": $("#DRIVER").val(),
+                "DL_NO": $("#DL_NO").val(),
+                "GATE_IN_NO": $("#GATE_IN_NO").val(),
+                "GATE_IN_DT": new Date($("#GATE_IN_DT").val()).toDateString(),
+                "GATE_IN_TIME": $("#GATE_IN_TIME").val(),
+                "GATE_IN_BY": $("#GATE_IN_BY").val(),
+                "PLANT": $("#PLANT").val()
+            }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function openPO() {
+
+        $("#POList").dialog({
+            height: 450,
+            width: 500,
+            modal: true
+        });
+    };
+    $(function () {
+        $('#ITEM_BODY1 tr td a').click(function () {
+            var id = $(this).attr('id');
+            alert(id);
+        });
+    });
+</script>
+<div id="POList" title="Purchase Orders" style="display:none;">
+      <form style="min-height:350px; background-color:#A3C1E4; max-height:350px;">
+        <div class="dataTables_scroll" style="margin-bottom: 5px;">
+            <div class="dataTables_scrollHead" style="overflow: auto; min-height: 350px; width: 100%; margin-top: 0px; max-height: 350px;">
+                <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #A3C1E4;">
+                    <table cellpadding="0" cellspacing="0" border="0" id="PO_L" class="table  dataTable table2" style="margin-left: 0px; width: 100%;position:relative; Font-weight:bold;color:#000000">
+                        <thead>
+                            <tr role="row">
+                                <th aria-label="Select: ">Select</th>
+                                <th aria-label="Query: ">Purchase Order</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center" id="ITEM_BODY1" class="ITEM_BODY" role="alert" aria-live="polite" aria-relevant="all" class="table-body">
+                            @if (Model.POStatusDetails != null)
+                            {
+                                if (Model.POStatusDetails[0].IS_SUCCESS)
+                                {
+                                    foreach (var obj in Model.POStatusDetails)
+                                    {
+                                        <tr>
+                                            <td>
+                                                
+                                                <a href="#" id="@obj.PO" >Select</a>
+                                            </td>
+                                            <td>
+                                                @obj.PO
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

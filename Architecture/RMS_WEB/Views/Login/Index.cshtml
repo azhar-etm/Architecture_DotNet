@@ -1,0 +1,225 @@
+﻿@model RMS_WEB.Models.IEmployeeModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta information -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <!-- Title-->
+    <title>Vendor Login</title>
+    <!-- Favicons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="@Url.Content("~/assets/ico/apple-touch-icon-144-precomposed.png")">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="@Url.Content("~/assets/ico/apple-touch-icon-114-precomposed.png")">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="@Url.Content("~/assets/ico/apple-touch-icon-72-precomposed.png")">
+    <link rel="apple-touch-icon-precomposed" href="@Url.Content("~/assets/ico/apple-touch-icon-57-precomposed.png")">
+    <link rel="shortcut icon" href="@Url.Content("~/assets/ico/favicon.png")">
+    <!-- CSS Stylesheet-->
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/bootstrap/bootstrap.min.css")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/themes/themes.css")" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/assets/css/style.css")" />
+
+</head>
+<body class="full-lg">
+    <div id="wrapper">
+
+        <div id="loading-top">
+            <div id="canvas_loading"></div>
+            <span>Checking...</span>
+        </div>
+
+        <div id="main">
+            <div class="real-border">
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-1"></div>
+                </div>
+            </div>
+            <div class="container">
+
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="account-wall">
+                            <section class="align-lg-center">
+                                <div class="site-logo"></div>
+                                <h1 class="login-title"><span>Vendor Portal</span><small> Inowits</small></h1>
+                            </section>
+                            <form id="form-signin" class="form-signin" method="post" action="Login/EmployeeLogin">
+                                <section>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                        <input type="text" class="form-control EMP_LOGIN" name="EMP_LOGIN" placeholder="Username">
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                        <input type="password" class="form-control EMP_PASS" name="EMP_PASS" placeholder="Password">
+                                    </div>
+                                    <button class="btn btn-lg btn-theme-inverse btn-block" type="submit" onclick="return Validate()" id="sign-in">Sign in</button>
+                                </section>
+                                <section class="clearfix">
+                                    <div class="iCheck pull-left" data-color="red">
+                                        <input type="checkbox" checked>
+                                        <label>Remember</label>
+                                    </div>
+                                    <a href="#" id="FRG_PWD" onclick="User()" class="pull-right help notific" data-theme="info" data-horizontal="bottom">Forget Password?</a>
+                                </section>
+                                <div style="text-align: left; margin-top: 25px; margin-bottom: 25px">
+                                    <span id="err_msg" style="color: red; font-size: smaller"></span>
+                                </div>
+                                @if (Model.IS_ERROR)
+                                {
+                                    <div style="text-align: left; margin-top: 25px; margin-bottom: 25px">
+                                        <span style="color: red; font-size: smaller">@Model.ERROR_MSG</span>
+                                    </div>
+                                }
+                                @if (Model.LoginDetail != null)
+                                {
+                                    if (Model.LoginDetail.Count > 0)
+                                    {
+                                        if (!Model.LoginDetail[0].IS_SUCCESS)
+                                        {
+                                    <span style="color: red">@Model.LoginDetail[0].RESPONSE_MESSAGE</span>
+                                        }
+                                        else
+                                        {
+                                            ViewBag.Name = "LOGIN";
+                                            Response.Redirect("~/Dashboard");
+                                        }
+                                    }
+                                }
+
+                            </form>
+                            <a href="http://www.saptalabs.com" target="_blank" class="footer-link">&copy; Saptalabs </a>
+                        </div>
+                        <!-- //account-wall-->
+
+                    </div>
+                    <!-- //col-sm-6 col-md-4 col-md-offset-4-->
+                </div>
+
+
+                <!-- //row-->
+            </div>
+            <!-- //container-->
+
+        </div>
+        <!-- //main-->
+
+
+    </div>
+    <!-- //wrapper-->
+
+
+    <!--
+////////////////////////////////////////////////////////////////////////
+//////////     JAVASCRIPT  LIBRARY     //////////
+/////////////////////////////////////////////////////////////////////
+-->
+
+    <!-- Jquery Library -->
+    <script type="text/javascript" src="@Url.Content("~/assets/js/jquery.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/assets/js/jquery.ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/assets/plugins/bootstrap/bootstrap.min.js")"></script>
+    <!-- Modernizr Library For HTML5 And CSS3 -->
+    <script type="text/javascript" src="@Url.Content("~/assets/js/modernizr/modernizr.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/assets/plugins/mmenu/jquery.mmenu.js")"></script>
+    <!-- Holder Images -->
+    <script type="text/javascript" src="@Url.Content("~/assets/plugins/holder/holder.js")"></script>
+    <!-- Form plugins -->
+    <script type="text/javascript" src="@Url.Content("~/assets/plugins/form/form.js")"></script>
+    <!-- Datetime plugins -->
+    <script type="text/javascript" src="@Url.Content("~/assets/plugins/datetime/datetime.js")"></script>
+    <!-- Library Chart-->
+    <script type="text/javascript" src="@Url.Content("~/assets/plugins/chart/chart.js")"></script>
+    <!-- Library Themes Customize-->
+    <script type="text/javascript" src="@Url.Content("~/assets/js/caplet.custom.js")"></script>
+    <script type="text/javascript">
+        $(function () {
+            //Login animation to center 
+            function toCenter() {
+                var mainH = $("#main").outerHeight();
+                var accountH = $(".account-wall").outerHeight();
+                var marginT = (mainH - accountH) / 2;
+                if (marginT > 30) {
+                    $(".account-wall").css("margin-top", marginT - 15);
+                } else {
+                    $(".account-wall").css("margin-top", 30);
+                }
+            }
+            toCenter();
+            var toResize;
+            $(window).resize(function (e) {
+                clearTimeout(toResize);
+                toResize = setTimeout(toCenter(), 500);
+            });
+
+            //Canvas Loading
+            var throbber = new Throbber({ size: 32, padding: 17, strokewidth: 2.8, lines: 12, rotationspeed: 0, fps: 15 });
+            throbber.appendTo(document.getElementById('canvas_loading'));
+            throbber.start();         
+
+
+            $("#form-signin").submit(function (event) {
+                //event.preventDefault();
+                var main = $("#main");
+                //scroll to top
+                main.animate({
+                    scrollTop: 0
+                }, 500);
+                main.addClass("slideDown");     
+
+            });
+        });
+            ​
+    </script>
+    <script>
+        function Validate(){
+            if($(".EMP_LOGIN").val() == "" && $(".EMP_PASS").val() == "")
+            {
+                $("#err_msg").html("Enter UserName and password");
+                return false;
+            }
+            else if($(".EMP_LOGIN").val() == "")
+            {
+                $("#err_msg").html("Enter UserName");
+                return false;
+            }
+            else if($(".EMP_PASS").val() == "")
+            {
+                $("#err_msg").html("Enter Password");
+                return false;
+            }
+            else
+            {
+                $("#err_msg").val("");
+                return true;
+            }
+        }
+        function User() {
+            if($(".EMP_LOGIN").val() == ""){
+                $("#err_msg").html("Enter UserName");
+            }
+            else{
+                var value = $("#FRG_PWD").attr('href');
+                $("#FRG_PWD").attr('href', value.replace('#', '../Login/ForgetPassword?USER=' + $(".EMP_LOGIN").val()));
+                $("#FRG_PWD").click();
+            }
+        }
+       
+    </script>
+</body>
+</html>

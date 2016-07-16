@@ -1,0 +1,652 @@
+﻿@{
+    ViewBag.Title = "VendorPaymentReport";
+    Layout = "~/Views/Shared/Master1.cshtml";
+}
+<div>
+    <ol class="breadcrumb">
+        <li><a href="../Dashboard">Dashboard</a></li>
+        <li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">Reports
+                <i class="dropdown-icon fa fa-angle-down"></i>
+			</a>
+			<ul class="dropdown-menu pull-left icon-right arrow"> 
+				<li><a href="../Purchase/InvoicePaymentReport"> <i class="icon  fa fa-bar-chart-o"></i><span class="custom-report"> Invoice Payment Report</span> </a></li>
+				<li><a href="../Purchase/POPaymentReport"> <i class="icon  fa fa-bar-chart-o"></i><span class="custom-report"> PO Payment Report</span> </a></li>
+                <li><a href="../Purchase/VendorPaymentReport"><i class="icon  fa fa-bar-chart-o"></i><span class="custom-report"> Vendor Payment Report</span></a></li>
+			</ul>										 
+		</li>
+        <li><a href="../Purchase/VendorPaymentReport">Vendor Payment Report</a></li>
+        <a href="#" style="float:right; font-size:20px;"><i class="fa fa-question-circle"></i></a>
+    </ol>
+    <!-- //breadcrumb-->
+    @if (Model.IS_ERROR)
+    {
+        <div style="text-align: center; margin-bottom: 50px">
+            <span style="color: red; font-size: large">@Model.ERROR_MSG</span>
+        </div>
+    }
+    else
+    {		
+        <div id="content">
+            <div class="row">
+                <table style="width:100%;">
+                    <tr>
+                        <td>
+                            <label class="control-label query-row">Invoice No</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control query-row" id="VENDOR_INV" name="VENDOR_INV" value="" />
+                        </td>
+                        <td>
+                            <label class="control-label query-row">Reference No</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control query-row" id="REF_NO" name="REF_NO" value="" />
+                        </td>
+                        <td>
+                            <label class="control-label query-row">Reference Date</label>
+                        </td>
+                        <td>
+                            <input id="REF_DT" name="REF_DT" type="text" onchange="REF_DATE()" class="input-group date form_datetime form-control query-row" data-date-format="mm/dd/yyyy" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label query-row">Payment Amount</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control query-row NumberTextBox" id="AMT_PYMT" name="AMT_PYMT" value="0" />
+                        </td>
+                        <td>
+                            <label class="control-label query-row">Is Advance?</label>
+                        </td>
+                        <td id="RadioBtn">
+                            <ul>
+                                <li>
+                                    <input type="radio" id="PYMT_YES" onchange="IS_ADV()" name="IS_ADV_PYMT" value="true">
+                                    <label>Yes</label>
+                                </li>
+                                <li>
+                                    <input  type="radio" id="PYMT_NO" onchange="IS_ADV_NO()" name="IS_ADV_PYMT" value="false" >
+                                    <label>No</label>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </table>
+                <div class="dataTables_scroll" style="margin-top:5px; margin-bottom:5px;" >
+                    <div class="dataTables_scrollHead" style="overflow: auto;min-height:500px; width: 100%;margin-top:0px; max-height:500px;">
+                        <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color:#D9E5F2;">
+                            <table border="0" id="PYMT_VENDOR" class="table dataTable" style="margin-left: 0px; width: 98%;">
+                                   
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- //content > row-->
+        </div>
+        <!-- //content-->
+    }
+</div>
+<script>
+    $(document).ready(initPage);
+
+    function initPage() {
+        GetAllPaymentDocs();
+        customRadio("IS_ADV_PYMT");
+    }
+    function GetAllPaymentDocs() {
+        try {
+            var PO = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetAllPaymentDocs";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";                        
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+                
+            }
+
+            var dataRec = {  }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    $("#VENDOR_INV").keyup(function (e) {
+        try {
+            var VENDOR_INV = $("#VENDOR_INV").val();
+            $("#REF_NO").val("");
+            $("#REF_DT").val("");
+            $("#AMT_PYMT").val('0');
+            $("#PYMT_NO").click();
+            var REF_NO = "";
+            var REF_DT = "";
+            var AMT_PYMT = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchVendorPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+
+            }
+
+            var dataRec = { "VENDOR_INV": VENDOR_INV, "REF_NO": REF_NO, "REF_DT": REF_DT, "AMT_PYMT": AMT_PYMT, "IS_ADV_PYMT": 0 }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    $("#REF_NO").keyup(function (e) {
+        try {
+            var REF_NO = $("#REF_NO").val();
+            $("#VENDOR_INV").val("");
+            $("#REF_DT").val("");
+            $("#AMT_PYMT").val('0');
+            $("#PYMT_NO").click();
+            var VENDOR_INV = "";
+            var REF_DT = "";
+            var AMT_PYMT = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchVendorPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+
+            }
+
+            var dataRec = { "VENDOR_INV": VENDOR_INV, "REF_NO": REF_NO, "REF_DT": REF_DT, "AMT_PYMT": AMT_PYMT, "IS_ADV_PYMT": 0 }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    $("#REF_DT").keyup(function (e) {
+        try {
+            var REF_DT = $("#REF_DT").val();
+            $("#VENDOR_INV").val("");
+            $("#REF_NO").val("");
+            $("#AMT_PYMT").val('0');
+            $("#PYMT_NO").click();
+            var VENDOR_INV = "";
+            var REF_DT = "";
+            var AMT_PYMT = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchVendorPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+
+            }
+
+            var dataRec = { "VENDOR_INV": VENDOR_INV, "REF_NO": REF_NO, "REF_DT": REF_DT, "AMT_PYMT": AMT_PYMT, "IS_ADV_PYMT": 0 }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    $("#AMT_PYMT").keyup(function (e) {
+        try {
+            var AMT_PYMT = $("#AMT_PYMT").val();
+            $("#VENDOR_INV").val("");
+            $("#REF_NO").val("");
+            $("#REF_DT").val("");
+            $("#PYMT_NO").click();
+            var REF_NO = "";
+            var REF_DT = "";
+            var VENDOR_INV = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchVendorPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+
+            }
+
+            var dataRec = { "VENDOR_INV": VENDOR_INV, "REF_NO": REF_NO, "REF_DT": REF_DT, "AMT_PYMT": AMT_PYMT, "IS_ADV_PYMT": 0 }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    });
+    function REF_DATE() {
+        try {
+            var REF_DT = $("#REF_DT").val();
+            $("#VENDOR_INV").val("");
+            $("#REF_NO").val("");
+            $("#AMT_PYMT").val('0');
+            $("#PYMT_NO").click();
+            var REF_NO = "";
+            var VENDOR_INV = "";
+            var AMT_PYMT = 0;
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchVendorPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+
+            }
+
+            var dataRec = { "VENDOR_INV": VENDOR_INV, "REF_NO": REF_NO, "REF_DT": REF_DT, "AMT_PYMT": AMT_PYMT, "IS_ADV_PYMT": 0 }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function IS_ADV() {
+        try {
+            $("#VENDOR_INV").val("");
+            $("#REF_NO").val("");
+            $("#AMT_PYMT").val('0');
+            $("#REF_DT").val("");
+            var REF_DT = "";
+            var REF_NO = "";
+            var VENDOR_INV = "";
+            var AMT_PYMT = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchVendorPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+
+            }
+
+            var dataRec = { "VENDOR_INV": VENDOR_INV, "REF_NO": REF_NO, "REF_DT": REF_DT, "AMT_PYMT": AMT_PYMT, "IS_ADV_PYMT": 1 }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function IS_ADV_NO() {
+        try {
+            $("#VENDOR_INV").val("");
+            $("#REF_NO").val("");
+            $("#AMT_PYMT").val('0');
+            $("#REF_DT").val("");
+            var REF_DT = "";
+            var REF_NO = "";
+            var VENDOR_INV = "";
+            var AMT_PYMT = "";
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchVendorPayment";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PYMT_VENDOR' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>PayDoc</th>";
+                tmpRows += "<th   aria-label='Phone: '>Invoice</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Ref.Dt</th>";
+                tmpRows += "<th   aria-label='Phone: '>Amount</th>";
+                tmpRows += "<th   aria-label='Phone: '>Deduction</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td>" + val.PAY_DOC + "</td>";
+                        tmpRows += "<td>" + val.VENDOR_INV + "</td>";
+                        tmpRows += "<td>" + val.REF_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.REF_DT) + "</td>";
+                        tmpRows += "<td>" + val.AMT_PYMT + "</td>";
+                        tmpRows += "<td>" + val.AMT_DEDUCT + "</td>";
+                        tmpRows += "<td>" + val.AMT_CURR + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PYMT_VENDOR").replaceWith(tmpRows);
+
+            }
+
+            var dataRec = { "VENDOR_INV": VENDOR_INV, "REF_NO": REF_NO, "REF_DT": REF_DT, "AMT_PYMT": AMT_PYMT, "IS_ADV_PYMT": 0 }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function ConvertJsonDateString(jsonDate) {
+        var shortDate = null;
+        if (jsonDate) {
+            var regex = /-?\d+/;
+            var matches = regex.exec(jsonDate);
+            var dt = new Date(parseInt(matches[0]));
+            var month = dt.getMonth() + 1;
+            var monthString = month > 9 ? month : '0' + month;
+            var day = dt.getDate();
+            var dayString = day > 9 ? day : '0' + day;
+            var year = dt.getFullYear();
+            if (year != 1)
+                shortDate = monthString + '/' + dayString + '/' + year;
+            else
+                shortDate = "";
+        }
+        return shortDate;
+    };
+</script>

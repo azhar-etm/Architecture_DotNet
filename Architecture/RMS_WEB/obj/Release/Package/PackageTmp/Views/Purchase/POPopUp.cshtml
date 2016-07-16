@@ -1,0 +1,70 @@
+﻿@model RMS_WEB.Models.IPurchaseOrderModel
+
+@{
+    AjaxOptions options1 = new AjaxOptions();
+    options1.HttpMethod = "POST"; ;
+    options1.OnFailure = "onFailure";
+    options1.OnSuccess = "onSuccess";
+    //options.LoadingElementDuration = 1000;
+    options1.LoadingElementId = "test";
+    options1.UpdateTargetId = "POList1";
+    options1.InsertionMode = InsertionMode.Replace;
+} 
+@if(Model.IS_ERROR)
+{
+    <div style="text-align:center; margin-bottom:50px">
+        <span style="color:red; font-size:large">@Model.ERROR_MSG</span>
+    </div>
+}
+else
+{
+
+    <style>
+    #POList{
+    width:100%;
+    }
+    #POList td {
+    margin:4px;
+    text-align:center;
+    width:50px;
+    }
+</style>
+
+
+
+ if(Model.POList!=null)
+ {
+if (Model.POList[0].IS_SUCCESS)
+{
+    int tmp = 1;
+    <table id="CoupanList" class="table  dataTable">
+        <thead>
+            <tr>
+                <td>No</td>
+                <td>Purchase Order</td>
+                <td>Manage </td>
+           </tr>
+       </thead>
+        
+       @foreach (var obj in Model.POList)
+       {
+            <tr>
+                <td>@(tmp++)</td>
+                <td>@obj.PO</td>
+                <td></td>
+            </tr>
+      }
+    </table> 
+}
+else
+{ 
+<div> @Model.POList[0].RESPONSE_MESSAGE</div>
+}
+}
+
+}
+ 
+    
+ 
+
+

@@ -1,0 +1,809 @@
+﻿@model RMS_WEB.Models.PurchaseOrderModel
+@{
+    ViewBag.Title = "ASN";
+    Layout = "~/Views/Shared/Master1.cshtml";
+    var userid = RMS_WEB.Controllers.cookieInfo.GetUserInfo(System.Web.HttpContext.Current.Request).USERID;
+}
+
+<style>
+    .table1 tr {
+        height: 10px;
+    }
+    .table1 tr td {
+        height: 10px;
+    }
+    .table2 tbody tr td {
+        padding: 2px 8px;
+    }
+    .checkbox-image {
+        width:16px; height:16px;
+        background-image: url('/assets/img/checkbox.png');
+    }
+</style>
+<div>
+    <ol class="breadcrumb">
+        <li><a href="../Dashboard">Dashboard</a></li>
+        <li><a href="../ASN">ASN</a></li>
+        <a href="#" style="float: right; font-size: 20px;"><i class="fa fa-question-circle"></i></a>
+    </ol>
+    <!-- //breadcrumb-->
+        <div id="content">
+            <div class="row">
+                <input type="hidden" id="check_values"/>
+                <table width="80%" class="table1">
+                    <input type="hidden" id="USER" value="@userid"/>
+                    <tr class="bgC">
+                        <td>
+                            <label class="control-label" style="padding-top:5px; margin-left:10px;">ASN</label>
+                        </td> 
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>       
+                        <td>
+                            @*<a href="#" id="add" title="Add Items" onclick="AddItems()" style="float: right; margin-right:20px; font-size: 20px;"><i class="fa fa-plus-circle"></i></a>*@
+                        </td>                
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Purchase Order</label>
+                        </td>
+                        <td>
+                            <input type="text" id="PO_S" name="PO_S" class="custom-label-dec row-1px" value="" placeholder="Select PO" readonly="true" style="width:170px;" />
+                            <a class="query-row" href="#" onclick="openPO()" title="PO Lookup" style="background-image:url('/assets/img/small_icon.png'); background-repeat:no-repeat; padding-left:5px; padding-right:7px; padding-bottom:5px; margin-bottom:5px; font-size: 20px; "><i class="fa fa-paperclip"></i></a>
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Gross Wt / UoM</label>
+                        </td>
+                        <td>
+                            <input type="text" id="GROSS_WT" name="GROSS_WT" class="custom-label-dec row-1px" value="" placeholder="Gross wt." />
+                            <select class="custom-select-small row-1px" id="GROSS_UoM" name="GROSS_UoM" data-size="10" data-live-search="true">
+                                <option class="GROSS_WT" value="UoM">UoM</option>
+
+                            </select><!-- //Live Dropdown-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">ASN Date</label>
+                        </td>
+                        <td>
+                            <input id="ASN_DT" name="ASN_DT" type="text" class="input-group date form_datetime form-control row-1px" data-date-format="mm/dd/yyyy" placeholder="Date" style="width: 200px;" />
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Net Wt / UoM</label>
+                        </td>
+                        <td>
+                            <input type="text" id="NET_WT" name="NET_WT" class="custom-label-dec row-1px" value="" placeholder="Net wt." />
+                            <select class="custom-select-small row-1px" id="NET_UoM" name="NET_UoM" data-size="10" data-live-search="true">
+                                <option class="NET_UoM" value="UoM">UoM</option>
+
+                            </select><!-- //Live Dropdown-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">No. of Packs</label>
+                        </td>
+                        <td>
+                            <input type="text" id="NO_PACKS" name="NO_PACKS" class="form-control row-1px" value="" placeholder="No. of packs" style="width: 200px;" />
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Volume Wt / UoM</label>
+                        </td>
+                        <td>
+                            <input type="text" id="VOL_WT" name="VOL_WT" class="custom-label-dec row-1px" value="" placeholder="Volume wt." />
+                            <select class="custom-select-small row-1px" id="VOL_UoM" name="VOL_UoM" data-size="10" data-live-search="true">
+                                <option class="VOL_UoM" value="UoM">UoM</option>
+
+                            </select><!-- //Live Dropdown-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Country Origin</label>
+                        </td>
+                        <td>
+                            <select class="custom-select row-1px" id="CNTRY_ORI" name="CNTRY_ORI" data-size="10" data-live-search="true">
+                                <option value="Coun">Country</option>
+
+                            </select><!-- //Live Dropdown-->
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Country Manufacture</label>
+                        </td>
+                        <td>
+                            <select class="custom-select row-1px" id="CNTRY_MNF" name="CNTRY_MNF" data-size="10" data-live-search="true">
+                                <option value="Manu">Manufacture</option>
+
+                            </select><!-- //Live Dropdown-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Delivery Challan</label>
+                        </td>
+                        <td>
+                            <input type="text" id="CHALLAN_NO" name="CHALLAN_NO" class="form-control row-1px" value="" placeholder="Challan" style="width: 200px;" />
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Challan Date</label>
+                        </td>
+                        <td>
+                            <input id="CHALLAN_DT" name="CHALLAN_DT" type="text" class="input-group date form_datetime form-control row-1px" data-date-format="mm/dd/yyyy" placeholder="Date" style="width: 200px;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Vehicle Number</label>
+                        </td>
+                        <td>
+                            <input type="text" id="STATE" name="STATE" class="form-control-alt query-row" value="" style="width: 35px;" />
+                            <input type="text" id="DISTRICT" name="DISTRICT" class="form-control-alt query-row" value="" style="width: 35px;" />
+                            <input type="text" id="AREA" name="AREA" class="form-control-alt query-row" value="" style="width: 35px;" />
+                            <input type="text" id="NO" name="NO" class="form-control-alt query-row" value="" style="width: 85px;" />
+                        </td>
+                        <td>
+                            <label class="control-label custom-label">Driver</label>
+                        </td>
+                        <td>
+                            <input type="text" id="DRIVER" name="DRIVER" class="form-control row-1px" value="" placeholder="Driver Name" style="width: 200px;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="control-label custom-label">Dispatch Date</label>
+                        </td>
+                        <td>
+                            <input id="DISPATCH_DT" name="DISPATCH_DT" type="text" class="input-group date form_datetime form-control row-1px" data-date-format="mm/dd/yyyy" placeholder="Date" style="width: 200px;" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- //content > row-->
+            <div class="row" id="ASN_ITEMS" class="ASN_ITEMS" style="margin-top:5px; width:80%">
+                <div class="bgC">
+                    <input type="hidden" id="ASN_ID" value="" />
+                    <label class="control-label" style="padding-top:5px; margin-left:10px;">ASN Item</label>
+                    <input type="checkbox" id="selectall" title="Select All" style="float: right; margin-right:20px; font-size: 15px; padding:5px; margin-top:8px; width:15px; height:15px; "/>
+                    @*<a href="#" id="selectall" title="Select All" style="float: right; margin-right:20px; font-size: 15px; padding-top:2px;"><i class="fa fa-check-square-o"></i></a>*@
+                    @*<a href="#" id="unselect" title="UnSelect All" style="float: right; margin-right:20px; font-size: 15px; padding-top:2px;"><i class="fa fa-square-o"></i></a>*@
+                    @*<a href="#" id="Item" title="Add Item" onclick="AddItemRow();" style="float: right; margin-right:20px; font-size: 15px; padding-top:2px;"><i class="fa fa-plus-square-o"></i></a>*@
+                </div>
+                <form style="min-height:190px; background-color:#A3C1E4; max-height:190px;">
+                    <div class="dataTables_scroll" style="margin-bottom: 5px;">
+                        <div class="dataTables_scrollHead" style="overflow: auto; min-height: 190px; width: 100%; margin-top: 0px; max-height: 190px;">
+                            <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #A3C1E4;">
+                                <table cellpadding="0" cellspacing="0" border="0" id="ASN_ITEM_TAB" class="table  dataTable table2" style="margin-left: 0px; width: 100%;position:relative; Font-weight:bold;color:#000000">
+                                    <thead>
+                                        <tr role="row">
+                                            <th aria-label="Select: ">Select</th>
+                                            <th aria-label="Query: ">Item</th>
+                                            <th aria-label="Status: ">Material</th>
+                                            <th aria-label="Status: ">Description</th>
+                                            <th aria-label="Status: ">UoM</th>
+                                            <th aria-label="Status: ">Ordered Qty.</th>
+                                            <th aria-label="Status: ">ASN Qty.</th>
+                                            <th aria-label="Status: ">GRN Qty.</th>
+                                            <th aria-label="Status: ">Shipment Qty.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody align="center" id="ITEM_BODY" class="ITEM_BODY" role="alert" aria-live="polite" aria-relevant="all" class="table-body">
+                                        <tr id="ROWS_ITEM"></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- //content > row-->
+            <table style="width:80%">
+                <tr style="float:right; margin-right:20px;">
+                    <td>
+                        <div class='error ASN_INFO'></div>
+                    </td>
+                    <td>
+                        <input type="button" onclick="ClearASN()" id="CANCEL" class="btn btn-theme" value="CANCEL" style="margin-left: 5px; min-width: 150px; max-width: 150px; float: left;" />
+                    </td>
+                    <td>
+                        <input type="button" onclick="CreateASN()" id="SUBMIT" class="btn btn-theme" value="SUBMIT" style="margin-left: 5px; min-width: 150px; max-width: 150px; float: left;" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- //content-->
+    
+</div>
+<script>
+    var count = 0;
+    $("#counter").val(count);
+    $(function () {
+        $('#ITEM_BODY1 tr td a').click(function () {
+            var id = $(this).attr('id');
+            getPODetails(id);
+        });
+    });
+    function ClearASN() {
+        $("#PO_S").val("");
+        $("#ASN_ID").val("");
+        $("#NO_PACKS").val("");
+        $("#ASN_DT").val(GetDate());
+        $("#GROSS_WT").val("");
+        $("#NET_WT").val("");
+        $("#VOL_WT").val("");
+        $(".GROSS_UoM").val("UoM");
+        $(".NET_UoM").val("UoM");
+        $(".VOL_UoM").val("UoM");
+        $("#CHALLAN_NO").val("");
+        $("#CHALLAN_DT").val("");
+        $("#DRIVER").val("");
+        $("#DISPATCH_DT").val("");
+        $("#CNTRY_ORI").val("Coun");
+        $("#CNTRY_MNF").val("Manu");
+        $("#STATE").val("");
+        $("#DISTRICT").val("");
+        $("#AREA").val("");
+        $("#NO").val("");
+        var tmpRows = "";
+        tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='ASN_ITEM_TAB' class='table  dataTable table2' style='margin-left: 0px; width: 100%;position:relative; Font-weight:bold;color:#000000'>";
+        tmpRows += "<thead>";
+        tmpRows += "<tr role='row'>";
+        tmpRows += "<th aria-label='Select: '>Select</th>";
+        tmpRows += "<th aria-label='Query: '>Item</th>";
+        tmpRows += "<th aria-label='Status: '>Material</th>";
+        tmpRows += "<th aria-label='Status: '>Description</th>";
+        tmpRows += "<th aria-label='Status: '>UoM</th>";
+        tmpRows += "<th aria-label='Status: '>Ordered Qty.</th>";
+        tmpRows += "<th aria-label='Status: '>ASN Qty.</th>";
+        tmpRows += "<th aria-label='Status: '>GRN Qty.</th>";
+        tmpRows += "<th aria-label='Status: '>Shipment Qty.</th>";
+        tmpRows += "</tr>";
+        tmpRows += "</thead>";
+        tmpRows += "<tbody align='center' id='ITEM_BODY' class='ITEM_BODY' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+        tmpRows += "<tr id='ROWS_ITEM'></tr>";
+        tmpRows += "</tbody>";
+        tmpRows += "</table>";
+        $("#ASN_ITEM_TAB").replaceWith(tmpRows);
+    }
+    function ClearASNItem() {
+        $("#ASN_ID").val("Select ASN");
+        $("#PO").val("Select PO");
+        $("#MATERIAL").val("Select Material");
+        $("#BATCH").val("");
+        $("#BASE_AMT").val("");
+        $("#NET_AMT").val("");
+        $("#REMARKS").val("");
+        $("#BASE_AMT").val("0");
+        $("#NET_AMT").val("0");
+        $("#SHIP_QTY").val("0");
+    }
+    $(document).ready(function () {
+        GetPOs();
+        GetASNIDs();
+        //AddItemRow();
+        $("#ASN_DT").val(GetDate());
+    });
+    $(function () {
+
+        // add multiple select / deselect functionality
+        $("#selectall").click(function () {
+            $('.case').attr('checked', this.checked);
+        });
+
+        // if all checkbox are selected, check the selectall checkbox
+        // and viceversa
+        $(".case").click(function () {
+
+            if ($(".case").length == $(".case:checked").length) {
+                $("#selectall").attr("checked", "checked");
+            } else {
+                $("#selectall").removeAttr("checked");
+            }
+
+        });
+    });
+    $().ready(function () {
+        Calculate();
+    });
+    $(".Calculate").keyup(function () {
+
+        Calculate();
+    });
+    $(".Calculate").change(function () {
+
+        Calculate();
+    });
+    function GetASNIDs() {
+        try {
+
+            var $self = this;
+            var count = 0;
+            $self.ajaxURL = "/ASN/GetASNIDs";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpASN = "<option class='SelectASN' selected='selected' value='Select ASN' > Select ASN </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpASN += "<option  class='SelectASN' value='" + val.ASN_ID + "'>" + val.ASN_ID + "</option>"
+                    }
+                });
+
+                $(".SelectASN").replaceWith(tmpASN);
+                //if (count > 0) {
+                //    GetPOs();
+                //    //GetMaterials();
+                //}
+                //else {
+                //    var tmp = "<div class='error ASN_ITEMS' style='margin-top: 20px;'><span id='error1'>Create ASN first.</span></div>";
+                //    $("#ASN_ITEMS").replaceWith(tmp);
+                //}
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetPOs() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetAllPOs";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpPO = "<option class='SelectPO' selected='selected' value='Select PO' > Select PO </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        tmpPO += "<option  class='SelectPO' value='" + val.PO + "'>" + val.PO + "</option>"
+                    }
+                });
+
+                $(".SelectPO").replaceWith(tmpPO);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function getPODetails(uiObj) {
+        try {
+            ClearASN();
+            var PO = uiObj;
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetPODetail";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        $("#ASN_DT").val(ConvertJsonDateString(val.ASN_DT));
+                        $("#NO_PACKS").val(val.NO_PACKS);
+                        $("#CHALLAN_NO").val(val.CHALLAN_NO);
+                        $("#CHALLAN_DT").val(ConvertJsonDateString(val.CHALLAN_DT));
+                        $("#DISPATCH_DT").val(ConvertJsonDateString(val.DISPATCH_DT));
+                        $("#GROSS_WT").val(val.GROSS_WT);
+                        $(".GROSS_UoM").val(val.GROSS_UoM);
+                        $("#NET_WT").val(val.NET_WT);
+                        $(".NET_UoM").val(val.NET_UoM);
+                        $("#VOL_WT").val(val.VOL_WT);
+                        $(".VOL_UoM").val(val.VOL_UoM);
+                        $("#DRIVER").val(val.DRIVER);
+                        $("#CNTRY_MNF").val(val.CNTRY_MNF);
+                        $("#CNTRY_ORI").val(val.CNTRY_ORI);
+                        var vehicle_no = val.VEHICLE_NO;
+                        if (vehicle_no != null && vehicle_no.length > 0) {
+                            var veh_arr = vehicle_no.split(" ");
+                            $("#STATE").val(veh_arr[0]);
+                            $("#DISTRICT").val(veh_arr[1]);
+                            $("#AREA").val(veh_arr[2]);
+                            $("#NO").val(veh_arr[3]);
+                        }
+                    }
+                    $("#PO_S").val(PO);
+                    getPOItems(PO);
+                    $("#POList").dialog("close");
+                });
+
+                
+            }
+
+            var dataRec = {
+                "USERID": $("#USER").val(),
+                "PO": PO
+                //"PO": $("#PO_LIST option:selected").text()
+            }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetMaterials() {
+        try {
+            var $self = this;
+            $self.ajaxURL = "/ASN/GetMaterials";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpMaterial = "<option class='SelectMATERIAL' selected='selected' value='Select Material' > Select Material </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        tmpMaterial += "<option  class='SelectMATERIAL' onClick='GetMaterial(this)' value='" + val.MATERIAL_CODE + "'>" + val.MATERIAL_CODE + "</option>"
+                    }
+                });
+                if(count > 0)
+                    $(".SelectMATERIAL"+count).replaceWith(tmpMaterial);
+                else
+                    $("#MATERIAL1").replaceWith(tmpMaterial);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetMaterial(id) {
+        try {
+            var str = $(id).attr('id');
+            var value = str.charAt(str.length - 1);
+            var $self = this;
+            $self.ajaxURL = "/ASN/GetMaterial";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        $("#DESCRIPTION"+value).text(val.MTEXT);                        
+                    }
+                    Calculate();
+                });
+
+            }
+
+            var dataRec = { "MATERIAL_CODE": $("#MATERIAL"+value+" option:selected").text() }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function CreateASN() {
+        try {
+            var $self = this;
+            $self.ajaxURL = "/ASN/CreateASN";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmp;
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        $("#ASN_ID").val(val.ASN_ID);
+                        var selected = new Array();
+                        $('input:checked').each(function () {
+                            selected.push($(this).attr('id'));
+                        });
+                        for (var i = 0; i < selected.length; i++) {
+                            CreateASNItem(selected[i]);
+                        }
+                        
+                        //ClearASN();
+                        tmp = "<div class='success ASN_CRTD' style='margin-right: 20px;'><span id='error2'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    else {
+                        tmp = "<div class='error ASN_CRTD' style='margin-right: 20px;'><span id='error2'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    $(".ASN_CRTD").replaceWith(tmp);
+                });                
+            }
+
+            var dataRec = {
+                "USERID": $("#USER").val(),
+                "PO": $("#PO_S").val(),
+                "NO_PACKS" : parseInt($("#NO_PACKS").val()),
+                "ASN_DT" : new Date($("#ASN_DT").val()).toDateString(),
+                "CNTRY_ORI": $("#CNTRY_ORI option:selected").text(),
+                "CNTRY_MNF": $("#CNTRY_MNF option:selected").text(),
+                "GROSS_WT" : parseFloat($("#GROSS_WT").val()),
+                "GROSS_UoM": $("#GROSS_UoM option:selected").text(),
+                "NET_WT" : parseFloat($("#NET_WT").val()),
+                "NET_UoM": $("#NET_UoM option:selected").text(),
+                "VOL_WT" : parseFloat($("#VOL_WT").val()),
+                "VOL_UoM": $("#VOL_UoM option:selected").text(),
+                "DISPATCH_DT": new Date($("#DISPATCH_DT").val()).toDateString(),
+                "CHALLAN_NO": $("#CHALLAN_NO").val(),
+                "CHALLAN_DT": new Date($("#CHALLAN_DT").val()).toDateString(),
+                "DRIVER": $("#DRIVER").val(),
+                "VEHICLE_NO": $("#STATE").val()+" "+$("#DISTRICT").val()+" "+$("#AREA").val()+" "+$("#NO").val()
+            }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function CreateASNItem(item) {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/ASN/CreateASNItem";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmp;
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        ClearASN();
+                        tmp = "<div class='success ASN_INFO' style='margin-right: 20px;'><span id='error3'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    else {
+                        tmp = "<div class='error ASN_INFO' style='margin-right: 20px;'><span id='error3'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    $(".ASN_INFO").replaceWith(tmp);
+                });
+            }
+
+            var dataRec = {
+                "USERID": $("#USER").val(),
+                "PO": $("#PO_S").val(),
+                "ASN_ID": $("#ASN_ID").val(),
+                "ITEM": item,
+                "SHIP_QTY": parseFloat($("#SHIP_QTY"+item).val())
+            }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function Calculate() {
+        var bs_amt=0;
+        var qty=0;
+        if ($("#BASE_AMT").val() == '')
+            bs_amt = 0;
+        else
+            bs_amt = parseFloat($("#BASE_AMT").val());
+        
+        if ($("#SHIP_QTY").val() == '')
+            qty = 0;
+        else
+            qty = parseFloat($("#SHIP_QTY").val());
+        $("#NET_AMT").val(bs_amt * qty);
+    }
+    function AddItemRow() {
+        //var count = makeCounter();
+        var tmpRow = $(".ITEM_BODY").html();
+        count = count + 1;
+        var selection = "";
+        if (count > 1) {            
+            for (var a = 1; a < count; a++) {
+                selection += $("#MATERIAL" + a + " option:selected").text() + ",";
+            }
+
+            $("#check_values").val("");
+            for (var j = 1; j <= count; j++) {
+                if ($("#ASN_ITEMS_CHECK" + j).is(':checked')) {
+                    alert(j);
+                }
+            }
+            //for (var j = 1; j <= count; j++) {
+            //    if ($("#ASN_ITEMS_CHECK" + j).hasClass("selected")) {
+            //        $("#check_values").val($("#check_values").val() + "," + "ASN_ITEMS_CHECK" + j);
+
+            //    }
+            //}
+        }
+        if ($("#ROWS_ITEM").html() == '') {
+            tmpRow = "";
+            tmpRow += "<tbody align='center' id='ITEM_BODY' class='ITEM_BODY' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+            tmpRow += "<tr id='ROWS_ITEM'>";
+            tmpRow += "<td><input type='checkbox' class='checkbox-image' onclick='' id='ASN_ITEMS_CHECK" + count + "' name='ASN_ITEMS_CHECK' value='' ></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td><select class='form-control' id='MATERIAL" + count + "' onchange='GetMaterial(this);' name='MATERIAL'  data-live-search='true' style='width: 100px;'>";
+            tmpRow += "<option class='SelectMATERIAL" + count + "' value='Select Material'>Select Material</option>";
+            tmpRow += "</select></td>";
+            tmpRow += "<td><label class='control-label' id='DESCRIPTION" + count + "' style='color:#000000; font-weight:100;'></label></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "</tr>";
+            tmpRow += "</tbody>";
+        }
+        else {
+            var checked_items = $("#check_values").val().split(',');
+            for (var i = 0; i < checked_items.length; i++) {
+                //alert(checked_items[i]);
+            }
+            var tmp = tmpRow;
+            tmpRow = "";
+            tmpRow += "<tbody align='center' id='ITEM_BODY' class='ITEM_BODY' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+            tmpRow += tmp;
+            tmpRow += "<tr id='ROWS_ITEM'>";
+            tmpRow += "<td><input type='checkbox' class='checkbox-image' onclick='' id='ASN_ITEMS_CHECK" + count + "' name='ASN_ITEMS_CHECK' value=''></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td><select class='form-control' id='MATERIAL" + count + "' onchange='GetMaterial(this);' name='MATERIAL'  data-live-search='true' style='width: 100px;'>";
+            tmpRow += "<option class='SelectMATERIAL" + count + "' value='Select Material'>Select Material</option>";
+            tmpRow += "</select></td>";
+            tmpRow += "<td><label class='control-label' id='DESCRIPTION" + count + "' style='color:#000000; font-weight:100;'></label></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "<td></td>";
+            tmpRow += "</tr>";
+            tmpRow += "</tbody>";
+        }
+        $(".ITEM_BODY").replaceWith(tmpRow);
+        //customCheck("ASN_ITEMS_CHECK");
+        if (count > 1) {
+            var selected = selection.split(',');
+            for (var b = 1; b < count; b++) {
+                $("#MATERIAL" + b).val(selected[b - 1]);
+            }
+        }
+        GetMaterials(count);
+    }
+    function GetDate() {
+        var fullDate = new Date();
+        var twoDigitMonth = ((fullDate.getMonth() + 1) > 9) ? (fullDate.getMonth() + 1) : '0' + (fullDate.getMonth() + 1);
+        var currentDate = twoDigitMonth + "/" + fullDate.getDate() + "/" + fullDate.getFullYear();
+        return currentDate;
+    }
+    function getPOItems(PO) {
+        try {
+            //var PO = $("#PO_LIST option:selected").text();
+            var id = "." + PO;
+            //$(id).addClass("selected");
+            //$(id).css({ "background-color": "#D9E4F2" });
+            var $self = this;
+            $self.ajaxURL = "/Dashboard/GetPOItems";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='ASN_ITEM_TAB' class='table  dataTable table2' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Select'>Select</th>";
+                tmpRows += "<th   aria-label='Item: '>Item</th>";
+                tmpRows += "<th   aria-label='Material: '>Material</th>";
+                tmpRows += "<th   aria-label='Description: '>Description</th>";
+                tmpRows += "<th   aria-label='UoM: '>UoM</th>";
+                tmpRows += "<th   aria-label='Qty: '>Ordered Qty.</th>";
+                tmpRows += "<th   aria-label='AMT: '>ASN Qty.</th>";
+                tmpRows += "<th   aria-label='CURR: '>GRN Qty.</th>";
+                tmpRows += "<th   aria-label='ASN: '>Shipment Qty.</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        if (val.ORD_QTY > 0 && val.ORD_QTY == val.ASN_QTY) {
+                            tmpRows += "<td>" + "" + "</td>";
+                        }
+                        else {
+                            tmpRows += "<td><input type='checkbox' class='case' id='" + val.POITEM + "' name='ASN_ITEMS_CHECK' value='' ></td>";
+                        }                        
+                        tmpRows += "<td>" + val.POITEM + "</td>";
+                        tmpRows += "<td>" + val.MATERIAL + "</td>";
+                        tmpRows += "<td>" + val.MTEXT + "</td>";
+                        tmpRows += "<td>" + val.ORD_UoM + "</td>";
+                        tmpRows += "<td>" + val.ORD_QTY + "</td>";
+                        tmpRows += "<td>" + val.ASN_QTY + "</td>";
+                        tmpRows += "<td>" + val.GRN_QTY + "</td>";
+                        if (val.ORD_QTY > 0 && val.ORD_QTY == val.ASN_QTY) {
+                            tmpRows += "<td>" + "<input type='text' id='SHIP_QTY" + val.POITEM + "' name='SHIP_QTY' class='custom-input-tbl row-1px' value='' placeholder='Qty' readonly='true' />" + "</td>";
+                        }
+                        else {
+                            tmpRows += "<td>" + "<input type='text' id='SHIP_QTY" + val.POITEM + "' name='SHIP_QTY' class='custom-input-tbl row-1px' value='' placeholder='Qty' />" + "</td>";
+                        }
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr><td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+                $("#ASN_ITEM_TAB").replaceWith(tmpRows);
+            }
+
+            var dataRec = { "PO": PO }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function ConvertJsonDateString(jsonDate) {
+        var shortDate = null;
+        if (jsonDate) {
+            var regex = /-?\d+/;
+            var matches = regex.exec(jsonDate);
+            var dt = new Date(parseInt(matches[0]));
+            var month = dt.getMonth() + 1;
+            var monthString = month > 9 ? month : '0' + month;
+            var day = dt.getDate();
+            var dayString = day > 9 ? day : '0' + day;
+            var year = dt.getFullYear();
+            if (year != 1)
+                shortDate = monthString + '/' + dayString + '/' + year;
+            else
+                shortDate = "";
+        }
+        return shortDate;
+    };
+    function openPO() {
+        
+        $("#POList").dialog({
+            height: 450,
+            width: 500,
+            modal: true
+        });
+    };
+</script>
+<div id="POList" title="Purchase Orders" style="display:none;">
+      <form style="min-height:350px; background-color:#A3C1E4; max-height:350px;">
+        <div class="dataTables_scroll" style="margin-bottom: 5px;">
+            <div class="dataTables_scrollHead" style="overflow: auto; min-height: 350px; width: 100%; margin-top: 0px; max-height: 350px;">
+                <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #A3C1E4;">
+                    <table cellpadding="0" cellspacing="0" border="0" id="PO_L" class="table  dataTable table2" style="margin-left: 0px; width: 100%;position:relative; Font-weight:bold;color:#000000">
+                        <thead>
+                            <tr role="row">
+                                <th aria-label="Select: ">Select</th>
+                                <th aria-label="Query: ">Purchase Order</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center" id="ITEM_BODY1" class="ITEM_BODY" role="alert" aria-live="polite" aria-relevant="all" class="table-body">
+                            @if (Model.POStatusDetails != null)
+                            {
+                                if (Model.POStatusDetails[0].IS_SUCCESS)
+                                {
+                                    foreach (var obj in Model.POStatusDetails)
+                                    {
+                                        <tr>
+                                            <td>
+                                                
+                                                <a href="#" id="@obj.PO" >Select</a>
+                                            </td>
+                                            <td>
+                                                @obj.PO
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,42 @@
+D:\Working Folder\RMS\DAL\bin\Debug\DAL.dll
+D:\Working Folder\RMS\DAL\bin\Debug\DAL.pdb
+D:\Working Folder\RMS\DAL\bin\Debug\ENTITY.dll
+D:\Working Folder\RMS\DAL\bin\Debug\ENTITY.pdb
+D:\Working Folder\RMS\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+D:\Working Folder\RMS\DAL\obj\Debug\DAL.dll
+D:\Working Folder\RMS\DAL\obj\Debug\DAL.pdb
+D:\suresh1May_W2S-PC2_8852\RMS\DAL\bin\Debug\DAL.dll
+D:\suresh1May_W2S-PC2_8852\RMS\DAL\bin\Debug\DAL.pdb
+D:\suresh1May_W2S-PC2_8852\RMS\DAL\bin\Debug\ENTITY.dll
+D:\suresh1May_W2S-PC2_8852\RMS\DAL\bin\Debug\ENTITY.pdb
+D:\suresh1May_W2S-PC2_8852\RMS\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+D:\suresh1May_W2S-PC2_8852\RMS\DAL\obj\Debug\DAL.dll
+D:\suresh1May_W2S-PC2_8852\RMS\DAL\obj\Debug\DAL.pdb
+D:\Azhar\RMS\DAL\bin\Debug\DAL.dll
+D:\Azhar\RMS\DAL\bin\Debug\DAL.pdb
+D:\Azhar\RMS\DAL\bin\Debug\ENTITY.dll
+D:\Azhar\RMS\DAL\bin\Debug\ENTITY.pdb
+D:\Azhar\RMS\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+D:\Azhar\RMS\DAL\obj\Debug\DAL.dll
+D:\Azhar\RMS\DAL\obj\Debug\DAL.pdb
+C:\Users\user\Desktop\Architecture\DAL\bin\Debug\DAL.dll
+C:\Users\user\Desktop\Architecture\DAL\bin\Debug\DAL.pdb
+C:\Users\user\Desktop\Architecture\DAL\bin\Debug\ENTITY.dll
+C:\Users\user\Desktop\Architecture\DAL\bin\Debug\ENTITY.pdb
+C:\Users\user\Desktop\Architecture\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+C:\Users\user\Desktop\Architecture\DAL\obj\Debug\DAL.dll
+C:\Users\user\Desktop\Architecture\DAL\obj\Debug\DAL.pdb
+D:\old references\Azhar\Desktop\Architecture\DAL\bin\Debug\DAL.dll
+D:\old references\Azhar\Desktop\Architecture\DAL\bin\Debug\DAL.pdb
+D:\old references\Azhar\Desktop\Architecture\DAL\bin\Debug\ENTITY.dll
+D:\old references\Azhar\Desktop\Architecture\DAL\bin\Debug\ENTITY.pdb
+D:\old references\Azhar\Desktop\Architecture\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+D:\old references\Azhar\Desktop\Architecture\DAL\obj\Debug\DAL.dll
+D:\old references\Azhar\Desktop\Architecture\DAL\obj\Debug\DAL.pdb
+D:\Azhar\DotNetDevelopment\Architecture\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+D:\Azhar\DotNetDevelopment\Architecture\DAL\obj\Debug\DAL.dll
+D:\Azhar\DotNetDevelopment\Architecture\DAL\obj\Debug\DAL.pdb
+D:\Azhar\DotNetDevelopment\Architecture\DAL\bin\Debug\DAL.dll
+D:\Azhar\DotNetDevelopment\Architecture\DAL\bin\Debug\DAL.pdb
+D:\Azhar\DotNetDevelopment\Architecture\DAL\bin\Debug\ENTITY.dll
+D:\Azhar\DotNetDevelopment\Architecture\DAL\bin\Debug\ENTITY.pdb

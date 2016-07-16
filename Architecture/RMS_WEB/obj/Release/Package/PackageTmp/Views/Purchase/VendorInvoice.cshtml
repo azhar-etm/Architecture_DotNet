@@ -1,0 +1,389 @@
+﻿@{
+    ViewBag.Title = "VendorInvoice";
+    Layout = "~/Views/Shared/Master1.cshtml";
+    var userid = RMS_WEB.Controllers.cookieInfo.GetUserInfo(System.Web.HttpContext.Current.Request).USERID;
+}
+<div>    
+    <ol class="breadcrumb">
+        <li><a href="../Dashboard">Dashboard</a></li>
+        <li><a href="../Purchase/VendorInvoice">Vendor Invoice</a></li>
+        <a href="#" style="float:right; font-size:20px;"><i class="fa fa-question-circle"></i></a>
+    </ol>
+    <!-- //breadcrumb-->
+		
+    <div id="content">
+        <div class="row">
+            <input type="hidden" id="USER" value="@userid"/>
+            <table width="100%">
+                <tr>
+                    <td width="50%" style="padding-right: 15px;">
+                        <div class="panel-body">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label class="control-label custom-label">Invoice No.</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="INV_NO" name="INV_NO" class="form-control query-row" value="" placeholder="Invoice no." style="width: 200px;">
+                                    </td>
+                                    <td>
+                                        <label class="control-label custom-label">Invoice Dt.</label>
+                                    </td>
+                                    <td>
+                                        <input id="INV_DT" name="INV_DT" type="text" onchange="REF_DATE()" class="input-group date form_datetime form-control query-row" data-date-format="mm/dd/yyyy" placeholder="Date" style="width: 200px;" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="control-label custom-label">Invoice Amt.</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="INV_AMT" name="INV_AMT" class="form-control query-row NumberTextBox" value="0" style="width: 200px;">
+                                    </td>
+                                    <td>
+                                        <label class="control-label custom-label">Currency</label>
+                                    </td>
+                                    <td>
+                                        <select class="custom-select query-row" id="CURR" name="CURR" data-size="10" data-live-search="true">
+                                            <option value="CURR">CURR</option>
+
+                                        </select><!-- //Live Dropdown-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="button" onclick="CreateInvoice()" id="SUBMIT" class="btn btn-theme" value="ADD" style="min-width: 150px; max-width: 150px; float: right;" />
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="button" onclick="ClearInvoice()" id="CANCEL" class="btn btn-theme" value="CLEAR" style="min-width: 150px; max-width: 150px; float: left;" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class='error INV_CRTD'></div>
+                            <div class="dataTables_scroll" style="margin-top:5px; margin-bottom:5px;" >
+                                <div class="dataTables_scrollHead" style="overflow: auto;min-height:450px; width: 100%;margin-top:0px; max-height:450px;">
+                                    <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color:#D9E5F2;">
+                                        <table   border="0" id="INV_LIST" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                   
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td width="50%" style="padding-right: 15px;">
+                        <div class="panel-body">
+                            <form class="form-view">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label class="control-label custom-label">Material</label>
+                                    </td>
+                                    <td>
+                                        <select class="custom-select query-row" id="MATERIAL_CODE" name="MATERIAL_CODE" onchange="GetMaterial()" data-size="10" data-live-search="true">
+                                            <option class="SelectMATERIAL" value="MATERIAL">MATERIAL</option>
+
+                                        </select><!-- //Live Dropdown-->
+                                    </td>
+                                    <td>
+                                        <input type="text" id="MATERIAL" name="MATERIAL" class="form-control query-row" value="" placeholder="Vendor material" style="width: 200px;">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="QTY" name="QTY" class="form-control query-row NumberTextBox" value="" placeholder="Quantity" style="width: 200px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="control-label custom-label">Invoice</label>
+                                    </td>
+                                    <td>
+                                        <select class="custom-select query-row" id="INV_NO1" name="INV_NO1" data-size="10" data-live-search="true">
+                                            <option class="SelectINVOICE" value="INVOICE">INVOICE</option>
+
+                                        </select><!-- //Live Dropdown-->
+                                    </td>
+                                    <td>
+                                        <input type="text" id="INV_ITEM1" name="INV_ITEM1" class="form-control query-row" value="" placeholder="Invoice Item" style="width: 200px;">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="INV_AMT1" name="INV_AMT1" class="form-control query-row NumberTextBox" value="" placeholder="Amount" style="width: 200px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        
+                                    </td>
+                                    <td>
+                                        <select class="custom-select query-row" id="CURR1" name="CURR1" data-size="10" data-live-search="true">
+                                            <option value="CURR">CURR</option>
+
+                                        </select><!-- //Live Dropdown-->
+                                    </td>
+                                    <td>
+                                        <input type="button" onclick="CreateMaterialInvoiceMap()" id="SUBMIT1" class="btn btn-theme" value="ADD" style="min-width: 150px; max-width: 150px; float: right;" />
+                                    </td>
+                                    <td>
+                                        <input type="button" onclick="ClearMATInvoice()" id="CANCEL1" class="btn btn-theme" value="CLEAR" style="min-width: 150px; max-width: 150px; float: left;" />
+                                    </td>
+                                </tr>
+                            </table>
+                                <div class='error MAT_INV_CRTD'></div>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- //content > row-->
+    </div>
+    <!-- //content-->
+    
+</div>
+
+<script>
+    $(document).ready(initPage);
+
+    function initPage() {
+        getVendorInvoices();
+        GetMaterials();
+        GetInvoices();
+    }
+    function getVendorInvoices() {
+        try {
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetVendorInvoices";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='INV_LIST' class='table  dataTable' style='margin-left: 0px; width: 100%; position:relative; Font-weight:bold;color:#000000'>";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Name: '>Inv. No.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Inv. Dt.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Inv. Amt.</th>";
+                tmpRows += "<th   aria-label='Phone: '>Currency</th>";
+                tmpRows += "<th   aria-label='Phone: '>Del</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        
+                        tmpRows += "<td>" + val.INV_NO + "</td>";
+                        tmpRows += "<td>" + ConvertJsonDateString(val.INV_DT) + "</td>";
+                        tmpRows += "<td>" + val.INV_AMT + "</td>";
+                        tmpRows += "<td>" + val.CURR + "</td>";
+                        tmpRows += "<td>" + "" + "</td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 14; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#INV_LIST").replaceWith(tmpRows);
+                
+            }
+
+            var dataRec = {  }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function CreateInvoice() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/CreateVendorInvoice";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmp;
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        ClearInvoice();
+                        tmp = "<div class='success INV_CRTD' style='margin-right: 20px;'><span id='error1'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    else {
+                        tmp = "<div class='error INV_CRTD' style='margin-right: 20px;'><span id='error1'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    $(".INV_CRTD").replaceWith(tmp);
+                });
+            }
+
+            var dataRec = {
+                "USERID": $("#USER").val(),
+                "INV_NO": $("#INV_NO").val(),
+                "INV_DT": new Date($("#INV_DT").val()).toDateString(),
+                "INV_AMT": parseFloat($("#INV_AMT").val()),
+                "CURR": $("#CURR").val()
+            }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function ClearInvoice() {
+        $("#INV_NO").val("");
+        $("#INV_DT").val("");
+        $("#INV_AMT").val("0");
+    }
+    function ClearMATInvoice() {
+        $("#MATERIAL_CODE").val("Material");
+        $("#INV_NO1").val("INVOICE");
+        $("#MATERIAL").val("");
+        $("#QTY").val("");
+        $("#INV_ITEM1").val("");
+        $("#INV_AMT1").val("");
+    }
+    function ConvertJsonDateString(jsonDate) {
+        var shortDate = null;
+        if (jsonDate) {
+            var regex = /-?\d+/;
+            var matches = regex.exec(jsonDate);
+            var dt = new Date(parseInt(matches[0]));
+            var month = dt.getMonth() + 1;
+            var monthString = month > 9 ? month : '0' + month;
+            var day = dt.getDate();
+            var dayString = day > 9 ? day : '0' + day;
+            var year = dt.getFullYear();
+            if (year != 1)
+                shortDate = monthString + '/' + dayString + '/' + year;
+            else
+                shortDate = "";
+        }
+        return shortDate;
+    };
+    function GetMaterials() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/ASN/GetMaterials";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpMaterial = "<option class='SelectMATERIAL' selected='selected' value='Material' > Material </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        tmpMaterial += "<option  class='SelectMATERIAL' value='" + val.MATERIAL_CODE + "'>" + val.MATERIAL_CODE + "</option>"
+                    }
+                });
+
+                $(".SelectMATERIAL").replaceWith(tmpMaterial);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetInvoices() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetVendorInvoices";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpInv = "<option class='SelectINVOICE' selected='selected' value='INVOICE' > INVOICE </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        tmpInv += "<option  class='SelectINVOICE' value='" + val.INV_NO + "'>" + val.INV_NO + "</option>"
+                    }
+                });
+
+                $(".SelectINVOICE").replaceWith(tmpInv);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetMaterial() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/ASN/GetMaterial";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        $("#MATERIAL").val(val.MATERIAL);
+                    }
+                });
+
+            }
+
+            var dataRec = { "MATERIAL_CODE": $("#MATERIAL_CODE option:selected").text() }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function CreateMaterialInvoiceMap() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/CreateMaterialInvoiceMap";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmp;
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        ClearMATInvoice();
+                        tmp = "<div class='success MAT_INV_CRTD' style='margin-right: 20px;'><span id='error2'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    else {
+                        tmp = "<div class='error MAT_INV_CRTD' style='margin-right: 20px;'><span id='error2'>" + val.RESPONSE_MESSAGE + "</span></div>";
+                    }
+                    $(".MAT_INV_CRTD").replaceWith(tmp);
+                });
+            }
+
+            var dataRec = {
+                "USERID": $("#USER").val(),
+                "INV_NO": $("#INV_NO1").val(),
+                "INV_ITEM": $("#INV_ITEM1").val(),
+                "INV_AMT": parseFloat($("#INV_AMT1").val()),
+                "MATERIAL_CODE": $("#MATERIAL_CODE option:selected").text(),
+                "MATERIAL": $("#MATERIAL").val(),
+                "QTY": $("#QTY").val(),
+                "CURR": $("#CURR1").val()
+            }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+</script>

@@ -1,0 +1,435 @@
+﻿@{
+    ViewBag.Title = "Queries";
+    Layout = "~/Views/Shared/Master1.cshtml";
+}
+<div>
+    <ol class="breadcrumb">
+        <li><a href="../Dashboard">Dashboard</a></li>
+        <li><a href="../Purchase/Queries">My Queries</a></li>
+        <a href="#" style="float: right; font-size: 20px;"><i class="fa fa-question-circle"></i></a>
+    </ol>
+    <!-- //breadcrumb-->
+    @if (Model.IS_ERROR)
+    {
+        <div style="text-align: center; margin-bottom: 50px">
+            <span style="color: red; font-size: large">@Model.ERROR_MSG</span>
+        </div>
+    }
+    else
+    {		
+        <div id="content">
+            <div class="row">
+                <table width="100%">
+                    <tr>
+                        <td width="50%" style="padding-right: 15px;">
+                            <div class="panel-body">
+                                <form class="form-view">
+                                    <table>
+                                        <thead></thead>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                            <tr>
+                                                <label class="control-label">My Queries</label>
+                                                <a href="#" id="shQuery" style="float: right; font-size: 20px; visibility: hidden;" title="Open new query"><i class="fa fa-comments"></i></a>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <select class="form-control" id="SRCH_CATE" name="SRCH_CATE" data-size="10" data-live-search="true" style="width: 150px;">
+                                                        <option value="Category">Category</option>
+                                                        <option value="General">General</option>
+                                                        <option value="GRN Mismatch">GRN Mismatch</option>
+                                                        <option value="Invoice Queries">Invoice Queries</option>
+                                                        <option value="Payment Related">Payment Related</option>
+                                                        <option value="PO Revision">PO Revision</option>
+                                                        @*if (obj.EMP_CNTRY != null)
+                                                        {
+                                                            foreach (Utility.Config.Country country in Enum.GetValues(typeof(Utility.Config.Country)))
+                                                            {
+                                                                if (obj.EMP_CNTRY.Trim().Equals(country.ToString().Trim()))
+                                                                {
+                                                                    <option value="@obj.EMP_CNTRY" selected="selected">@country</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option>@country</option>
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (Utility.Config.Country country in Enum.GetValues(typeof(Utility.Config.Country)))
+                                                            { 
+                                                                <option>@country</option>
+                                                            }
+                                                        }*@
+                                                    </select><!-- //Live Dropdown-->
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="EMP_CITY" class="form-control disable" value="" placeholder="type" style="width: 150px;">
+                                                </td>
+                                                <td>
+                                                    <input type="button" onclick="SearchPOQueries()" id="GO_BTN" class="btn btn-theme" value="GO" style="margin-left: 5px; min-width: 50px; max-width: 50px; float: left;" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="dataTables_scroll" style="margin-top: 5px; margin-bottom: 5px;">
+                                        <div class="dataTables_scrollHead" style="overflow: auto; min-height: 500px; width: 100%; margin-top: 0px; max-height: 500px;">
+                                            <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #D9E5F2;">
+                                                <table border="0" id="PO_QUERIES" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                        <td width="50%" style="padding-right: 15px;">
+                            <div class="panel-body" id="QUERY_FORM">
+                                <form class="form-view">
+                                    <table>
+                                        <thead></thead>
+                                        <tbody>
+                                            <tr>
+                                                <label class="control-label" style="margin-bottom: 30px;">New Query</label>
+                                                <label class="control-label" onclick="ClearQuery()" style="font-size:10px; color:#000000; font-weight:100; cursor:pointer; margin-left:10px; margin-bottom: 30px;">click here</label>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label custom-label">PO</label>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control query-row" id="PO_LIST" name="POLIST" data-size="10" data-live-search="true" style="width: 200px;">
+                                                        <option class="SelectPO" value="Select PO">Select PO</option>
+
+                                                    </select><!-- //Live Dropdown-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label custom-label">Category</label>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control query-row" id="CATE" name="CATE" data-size="10" data-live-search="true" style="width: 200px;">
+                                                        <option value="Category">Category</option>
+                                                        <option value="General">General</option>
+                                                        <option value="GRN Mismatch">GRN Mismatch</option>
+                                                        <option value="Invoice Queries">Invoice Queries</option>
+                                                        <option value="Payment Related">Payment Related</option>
+                                                        <option value="PO Revision">PO Revision</option>
+                                                    </select><!-- //Live Dropdown-->
+                                                </td>
+                                            </tr>
+                                            <tr class="reference">
+                                                <td>
+                                                    <label class="control-label custom-label">Reference Number</label>
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="REF_NO" name="REF_NO" class="form-control query-row" value="" readonly="true" placeholder="Reference number" style="width: 200px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label custom-label">Query</label>
+                                                </td>
+                                                <td>
+                                                    <textarea id="QRY" name="QRY" class="form-control query-row" value="" rows="3" style="width: 350px;"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr class="answer">
+                                                <td>
+                                                    <label class="control-label custom-label">Answer</label>
+                                                </td>
+                                                <td>
+                                                    <textarea id="QRY_ANS" name="QRY_ANS" class="form-control query-row" value="" rows="3" style="width: 350px;"></textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <input type="button" onclick="createQuery()" id="SUBMIT" class="btn btn-theme" value="SUBMIT" style="margin-left: 5px; min-width: 50px; max-width: 100px; float: right;" />
+                                                    <input type="button" onclick="ClearQuery()" id="CANCEL" class="btn btn-theme" value="CANCEL" style="margin-left: 5px; min-width: 50px; max-width: 100px; float: right;" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <div class="error" style="margin-top: 20px;"><span id="error1"></span></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- //content > row-->
+        </div>
+        <!-- //content-->
+    }
+</div>
+<script>
+    $(document).ready(initPage);
+
+    function initPage() {
+        GetAllPOQueries();
+        GetPOs();
+    }
+    $(document).ready(function () {
+
+        $("#shQuery").click(function () {
+            $("#QUERY_FORM").slideToggle("slow");
+        });
+        //$("#shQuery").click();
+        $(".reference").hide();
+        $(".answer").hide();
+        $("#error1").html("");
+    });
+    function GetAllPOQueries() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetAllPOQueries";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_QUERIES' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Select: '>Select</th>";
+                tmpRows += "<th   aria-label='Query: '>Query</th>";
+                tmpRows += "<th   aria-label='Status: '>Status</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td><input type='radio' onClick='openQuery(this)' name='IS_SELECTED' value='" + val.REF_NO + "'/></td>";
+                        tmpRows += "<td>" + val.QUERY + "</td>";
+                        if (val.STAT_ANS == 0) {
+                            tmpRows += "<td> <img src='/assets/img/cancelled.png' /> </td>";
+                        }
+                        else if (val.STAT_ANS == 1) {
+                            tmpRows += "<td> <img src='/assets/img/completed.png' /> </td>";
+                        }
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 15; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PO_QUERIES").replaceWith(tmpRows);
+                customRadio("IS_SELECTED");
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetPOs() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetAllPOs";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpPO = "<option class='SelectPO' selected='selected' value='Select PO' > Select PO </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        tmpPO += "<option  class='SelectPO' value='" + val.PO + "'>" + val.PO + "</option>"
+                    }
+                });
+                //var selectedvalue = parseInt($("#PRDT_GRP_ID").attr("selectedvalue"));
+
+                $(".SelectPO").replaceWith(tmpPO);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function openQuery(id) {
+        var REF_NO = $(id).val();
+        GetPOQuery(REF_NO);
+        return true;
+    }
+    function GetPOQuery(REF_NO) {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetPOQuery";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        $("#PO_LIST").val(val.PO);
+                        $("#CATE").val(val.CATEGORY);
+                        $("#QRY").val(val.QUERY);
+                        $("#REF_NO").val(val.REF_NO);
+                        if (val.IS_ANS == 1) {
+                            $("#QRY_ANS").val(val.ANS);
+                            $(".answer").show();
+                        }
+                        else {
+                            $("#QRY_ANS").val("");
+                            $(".answer").hide();
+                        }
+                        $(".reference").show();
+                        $("#SUBMIT").val("UPDATE");
+                        $("#error1").html("");
+                    }
+                });
+            }
+
+            var dataRec = { "REF_NO": REF_NO }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function ClearQuery() {
+        $("#PO_LIST").val("Select PO");
+        $("#CATE").val("Category");
+        $("#REF_NO").val("");
+        $("#QRY").val("");
+        $("#QRY_ANS").val("");
+        $(".answer").hide();
+        $("#SUBMIT").val("SUBMIT");
+        $(".reference").hide();
+    }
+    function createQuery() {
+        try {
+            var PO = $("#PO_LIST option:selected").text();
+            var Category = $("#CATE option:selected").text();
+            var Query = $("#QRY").val();
+            var REF_NO = $("#REF_NO").val();
+            var C_U = $("#SUBMIT").val();
+            var $self = this;
+            if (C_U == "SUBMIT") {
+                $self.ajaxURL = "/Purchase/CreatePOQuery";  //Controller             
+                this.onAjaxReturn = function (dataRecord) {
+                    var dtItems = eval(dataRecord);
+                    $(dataRecord).each(function (index, val) {
+                        if (val.IS_SUCCESS) {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "green");
+                            GetAllPOQueries();
+                            ClearQuery();
+                        }
+                        else {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "red");
+                        }
+                    });
+                }
+
+                var dataRec = { "PO": PO, "Category": Category, "Query": Query }
+            }
+            else {
+                $self.ajaxURL = "/Purchase/UpdatePOQuery";  //Controller             
+                this.onAjaxReturn = function (dataRecord) {
+                    var dtItems = eval(dataRecord);
+                    $(dataRecord).each(function (index, val) {
+                        if (val.IS_SUCCESS) {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "green");
+                            GetAllPOQueries();
+                            ClearQuery();
+                        }
+                        else {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "red");
+                        }
+                    });
+                }
+
+                var dataRec = { "REF_NO": REF_NO, "PO": PO, "Category": Category, "Query": Query }
+            }
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function SearchPOQueries() {
+        try {
+            var CATEGORY = $("#SRCH_CATE option:selected").text();
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchPOQuery";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_QUERIES' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Select: '>Select</th>";
+                tmpRows += "<th   aria-label='Query: '>Query</th>";
+                tmpRows += "<th   aria-label='Status: '>Status</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td><input type='radio' onClick='openQuery(this)' name='IS_SELECTED' value='" + val.REF_NO + "'/></td>";
+                        tmpRows += "<td>" + val.QUERY + "</td>";
+                        if (val.STAT_ANS == 0) {
+                            tmpRows += "<td> <img src='/assets/img/cancelled.png' /> </td>";
+                        }
+                        else if (val.STAT_ANS == 1) {
+                            tmpRows += "<td> <img src='/assets/img/completed.png' /> </td>";
+                        }
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 15; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PO_QUERIES").replaceWith(tmpRows);
+                customRadio("IS_SELECTED");
+            }
+
+            var dataRec = { "CATEGORY": CATEGORY }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+</script>

@@ -1,0 +1,477 @@
+﻿@{
+    ViewBag.Title = "FMS-Bill Booking";
+    Layout = "~/Views/Shared/Master1.cshtml";
+}
+@{
+    AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST"; ;
+    options.OnFailure = "onFailure";
+    options.OnSuccess = "onSuccess";
+    options.InsertionMode = InsertionMode.Replace;
+} 
+<div>
+    <ol class="breadcrumb">
+        <li><a href="../Dashboard">Dashboard</a></li>
+        <li><a href="../ASN/FMS">FMS-Bill Booking</a></li>
+        <a href="#" style="float: right; font-size: 20px;"><i class="fa fa-question-circle"></i></a>
+    </ol>
+    <!-- //breadcrumb-->
+    @if (Model.IS_ERROR)
+    {
+        <div style="text-align: center; margin-bottom: 50px">
+            <span style="color: red; font-size: large">@Model.ERROR_MSG</span>
+        </div>
+    }
+    else
+    {		
+        <div id="content">
+            <div class="row">
+                <table width="100%">
+                    <tr>
+                        <td width="100%" style="padding-right: 15px;">
+                            <div class="panel-body">
+                                <form class="form-view">
+                                    <table width="70%" style="margin:auto;">
+                                        <tr>
+                                            <label class="control-label">FMS - Bill Booking</label>
+                                            <a href="#" id="shQuery" style="float: right; font-size: 20px; visibility: hidden;" title="Open new query"><i class="fa fa-comments"></i></a>
+                                        </tr>
+                                        <tr>
+                                            <td width="40%">
+                                                <table>
+                                                    <thead></thead>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                        <tr>
+                                                            <td>
+                                                                <label class="control-label">Plant</label>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="PLANT" class="form-control disable" value="" placeholder="Plant" style="width: 150px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <label class="control-label">Shipment Doc</label>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="SHIPMENT_DOC" class="form-control disable" value="" placeholder="Shipment" style="width: 150px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <label class="control-label">LR Number</label>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="LR_NO" class="form-control disable" value="" placeholder="LR No." style="width: 150px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="button" onclick="SearchPOQueries()" id="GO_BTN" class="btn btn-theme" value="SEARCH" style="margin-left: 5px; min-width: 100px; max-width: 100px; float: left;" />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td width="20%">
+                                                
+                                            </td>
+                                            <td width="40%">
+                                                <table>
+                                                    <thead></thead>
+                                                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                                        <tr>
+                                                            <td>
+                                                                <label class="control-label">Invoice No.</label>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="INV_NO" class="form-control disable" value="" placeholder="Invoice No." style="width: 150px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <label class="control-label">Invoice Date</label>
+                                                            </td>
+                                                            <td>
+                                                                <input id="INV_DT" name="INV_DT" type="text" class="input-group date form_datetime form-control query-row" data-date-format="mm/dd/yyyy" placeholder="Date" style="width: 150px;" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="button" onclick="SearchPOQueries()" id="DRAFT" class="btn btn-theme" value="Save as Draft" style="margin-left: 5px; min-width: 100px; max-width: 100px; float: left;" />                                                                
+                                                                
+                                                            </td>
+                                                            <td>
+                                                                <input type="button" onclick="SearchPOQueries()" id="SUBMIT" class="btn btn-theme" value="SUBMIT" style="margin-left: 5px; min-width: 100px; max-width: 100px; float: left;" />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="dataTables_scroll" style="margin-top: 5px; margin-bottom: 5px;">
+                                        <div class="dataTables_scrollHead" style="overflow: auto; min-height: 500px; width: 100%; margin-top: 0px; max-height: 500px;">
+                                            <div class="dataTables_scrollHeadInner" style="width: 100%; padding-right: 0px; background-color: #D9E5F2;">
+                                                <table border="0" id="PO_QUERIES" class="table dataTable" style="margin-left: 0px; width: 100%;">
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- //content > row-->
+        </div>
+        <!-- //content-->
+    }
+</div>
+<script>
+    $(document).ready(initPage);
+
+    function initPage() {
+        GetAllPOQueries();
+        GetPOs();
+    }
+    $(document).ready(function () {
+        
+        $("#error1").html("");
+    });
+    function GetAllPOQueries() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetAllPOQueries";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_QUERIES' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Select: '>Select</th>";
+                tmpRows += "<th   aria-label='Query: '>Query</th>";
+                tmpRows += "<th   aria-label='Status: '>Process</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td><input type='radio' onClick='openQuery(this)' name='IS_SELECTED' value='" + val.REF_NO + "'/></td>";
+                        tmpRows += "<td>" + val.QUERY + "</td>";
+                        tmpRows += "<td><input type='checkbox' onClick='setPO(this)' name='IS_SELECTED1' title='Process' value='" + val.PO + "," + val.REF_NO + "'/></td>";
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 15; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PO_QUERIES").replaceWith(tmpRows);
+                customRadio("IS_SELECTED");
+                customAck("IS_SELECTED1");
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function GetPOs() {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetAllPOs";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpPO = "<option class='SelectPO' selected='selected' value='Select PO' > Select PO </option>";
+                $(dataRecord).each(function (index, val) {
+                    if (val.IS_SUCCESS) {
+                        tmpPO += "<option  class='SelectPO' value='" + val.PO + "'>" + val.PO + "</option>"
+                    }
+                });
+                //var selectedvalue = parseInt($("#PRDT_GRP_ID").attr("selectedvalue"));
+
+                $(".SelectPO").replaceWith(tmpPO);
+            }
+
+            var dataRec = {}
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function openQuery(id) {
+        var REF_NO = $(id).val();
+        GetPOQuery(REF_NO);
+        return true;
+    }
+    function GetPOQuery(REF_NO) {
+        try {
+
+            var $self = this;
+            $self.ajaxURL = "/Purchase/GetPOQuery";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        $("#PO_LIST").val(val.PO);
+                        $("#CATE").val(val.CATEGORY);
+                        $("#QRY").val(val.QUERY);
+                        $("#REF_NO").val(val.REF_NO);
+                        if (val.IS_ANS == 1) {
+                            $("#QRY_ANS").val(val.ANS);
+                            $(".answer").show();
+                        }
+                        else {
+                            $("#QRY_ANS").val("");
+                            $(".answer").hide();
+                        }
+                        $(".reference").show();
+                        $("#SUBMIT").val("UPDATE");
+                        $("#error1").html("");
+                    }
+                });
+            }
+
+            var dataRec = { "REF_NO": REF_NO }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function ClearQuery() {
+        $("#PO_LIST").val("Select PO");
+        $("#CATE").val("Category");
+        $("#REF_NO").val("");
+        $("#QRY").val("");
+        $("#QRY_ANS").val("");
+        $(".answer").hide();
+        $("#SUBMIT").val("SUBMIT");
+        $(".reference").hide();
+    }
+    function createQuery() {
+        try {
+            var PO = $("#PO_LIST option:selected").text();
+            var Category = $("#CATE option:selected").text();
+            var Query = $("#QRY").val();
+            var REF_NO = $("#REF_NO").val();
+            var C_U = $("#SUBMIT").val();
+            var $self = this;
+            if (C_U == "SUBMIT") {
+                $self.ajaxURL = "/Purchase/CreatePOQuery";  //Controller             
+                this.onAjaxReturn = function (dataRecord) {
+                    var dtItems = eval(dataRecord);
+                    $(dataRecord).each(function (index, val) {
+                        if (val.IS_SUCCESS) {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "green");
+                            GetAllPOQueries();
+                            ClearQuery();
+                        }
+                        else {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "red");
+                        }
+                    });
+                }
+
+                var dataRec = { "PO": PO, "Category": Category, "Query": Query }
+            }
+            else {
+                $self.ajaxURL = "/Purchase/UpdatePOQuery";  //Controller             
+                this.onAjaxReturn = function (dataRecord) {
+                    var dtItems = eval(dataRecord);
+                    $(dataRecord).each(function (index, val) {
+                        if (val.IS_SUCCESS) {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "green");
+                            GetAllPOQueries();
+                            ClearQuery();
+                        }
+                        else {
+                            $("#error1").html(val.RESPONSE_MESSAGE);
+                            $(".error").css("color", "red");
+                        }
+                    });
+                }
+
+                var dataRec = { "REF_NO": REF_NO, "PO": PO, "Category": Category, "Query": Query }
+            }
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function SearchPOQueries() {
+        try {
+            var CATEGORY = $("#SRCH_CATE option:selected").text();
+            var $self = this;
+            $self.ajaxURL = "/Purchase/SearchPOQuery";  //Controller             
+            this.onAjaxReturn = function (dataRecord) {
+                var dtItems = eval(dataRecord);
+                var tmpRows = "";
+                var count = 0;
+                tmpRows += "<table cellpadding='0' cellspacing='0' border='0' id='PO_QUERIES' class='table  dataTable' style='margin-left: 0px; width: 99%;position:relative; Font-weight:bold;color:#000000' >";
+                tmpRows += "<thead style=''>";
+                tmpRows += "<tr role='row'>";
+                tmpRows += "<th   aria-label='Select: '>Select</th>";
+                tmpRows += "<th   aria-label='Query: '>Query</th>";
+                tmpRows += "<th   aria-label='Status: '>Status</th>";
+                tmpRows += "</tr>";
+                tmpRows += "</thead>";
+                tmpRows += "<tbody align='center' role='alert' aria-live='polite' aria-relevant='all' class='table-body'>";
+                $(dataRecord).each(function (i, val) {
+                    if (val.IS_SUCCESS) {
+                        count = count + 1;
+                        tmpRows += "<tr>";
+                        tmpRows += "<td><input type='radio' onClick='openQuery(this)' name='IS_SELECTED' value='" + val.REF_NO + "'/></td>";
+                        tmpRows += "<td>" + val.QUERY + "</td>";
+                        if (val.STAT_ANS == 0) {
+                            tmpRows += "<td> <img src='/assets/img/cancelled.png' /> </td>";
+                        }
+                        else if (val.STAT_ANS == 1) {
+                            tmpRows += "<td> <img src='/assets/img/completed.png' /> </td>";
+                        }
+                        tmpRows += "</tr>";
+                    }
+                    else {
+
+                        tmpRows += "<tr>"
+                                    + "<td style='align:center;'>Records not found</td></tr>";
+                    }
+                });
+                for (var i = 0; i < 15; i++) {
+                    tmpRows += "<tr><td style='visibility:hidden;'>1</td></tr>";
+                }
+                tmpRows += "</tbody>"
+
+                tmpRows += "</table>"
+
+                $("#PO_QUERIES").replaceWith(tmpRows);
+                customRadio("IS_SELECTED");
+            }
+
+            var dataRec = { "CATEGORY": CATEGORY }
+
+            ajaxCall($self.ajaxURL, dataRec, $self.onAjaxReturn); //send form data to the server
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+    function setPO(id) {
+        var REF_NO = $(id).val();
+        openProcess(REF_NO);
+        return true;
+    }
+    function openProcess(REF_NO) {
+        $("#REF_NO").val(REF_NO);
+        $("#PROCESS").dialog({
+            height: 350,
+            width: 850,
+            modal: true
+        });
+    };
+    function onSuccess(data) {
+        if (data.IS_SUCCESS) {
+            $("#PROCESS").dialog("close");
+        }
+        else {
+            Message(data.RESPONSE_MESSAGE, false);
+
+        }
+    }
+    function onFailure(data) {
+        if (data.IS_SUCCESS) {
+            Message(data.RESPONSE_MESSAGE, true);
+        }
+        else {
+            Message(data.RESPONSE_MESSAGE, false);
+        }
+    }
+    function Message(message, isSuccess) {
+        $("#error1").html(message);
+        if (isSuccess) {
+            $(".error").css("color", "green");
+        }
+        else {
+            $(".error").css("color", "red");
+        }
+    }
+</script>
+<div id="PROCESS" title="Process Shipment" style="display:none;">
+    @{ using (Ajax.BeginForm("UpdatePOAck", "Purchase", options))
+       { 
+        <table>
+            <tr>
+               <td>
+                    <label class="control-label">Shipment Doc</label>
+                </td>
+                <td>
+                    <input type="text" name="SHIPMENT" class="form-control disable" value="" placeholder="Shipment doc." style="width: 150px;">
+                </td>
+                <td>
+                    <label class="control-label">Other Recovery</label>
+                </td>
+                <td>
+                    <input type="text" name="RECOVERY" class="form-control disable" value="" placeholder="Recovery" style="width: 150px;">
+                </td>
+                <td>
+                    <label class="control-label">Actual Loading</label>
+                </td>
+                <td>
+                    <input type="text" name="LOADING" class="form-control disable" value="" placeholder="Loading" style="width: 150px;">
+                </td>
+            </tr>
+            <tr>
+               <td>
+                    <label class="control-label">LR Number</label>
+                </td>
+                <td>
+                    <input type="text" name="LR_NO" class="form-control disable" value="" placeholder="LR No." style="width: 150px;">
+                </td>
+                <td>
+                    <label class="control-label">Other Actual(Remarks)</label>
+                </td>
+                <td>
+                    <input type="text" name="REMARKS" class="form-control disable" value="" placeholder="Remarks" style="width: 150px;">
+                </td>
+                <td>
+                    <label class="control-label">Actual Unloading</label>
+                </td>
+                <td>
+                    <input type="text" name="UNLOADING" class="form-control disable" value="" placeholder="Unloading" style="width: 150px;">
+                </td>
+            </tr>
+        </table>
+        <div class="error"><span id="error1"></span></div>   
+       }
+}  
+</div>
+

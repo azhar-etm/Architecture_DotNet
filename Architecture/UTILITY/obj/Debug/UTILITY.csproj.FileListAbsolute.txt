@@ -1,0 +1,24 @@
+D:\Working Folder\RMS\UTILITY\bin\Debug\UTILITY.dll
+D:\Working Folder\RMS\UTILITY\bin\Debug\UTILITY.pdb
+D:\Working Folder\RMS\UTILITY\obj\Debug\UTILITY.csprojResolveAssemblyReference.cache
+D:\Working Folder\RMS\UTILITY\obj\Debug\UTILITY.dll
+D:\Working Folder\RMS\UTILITY\obj\Debug\UTILITY.pdb
+D:\suresh1May_W2S-PC2_8852\RMS\UTILITY\bin\Debug\UTILITY.dll
+D:\suresh1May_W2S-PC2_8852\RMS\UTILITY\bin\Debug\UTILITY.pdb
+D:\suresh1May_W2S-PC2_8852\RMS\UTILITY\obj\Debug\UTILITY.dll
+D:\suresh1May_W2S-PC2_8852\RMS\UTILITY\obj\Debug\UTILITY.pdb
+D:\Azhar\RMS\UTILITY\bin\Debug\UTILITY.dll
+D:\Azhar\RMS\UTILITY\bin\Debug\UTILITY.pdb
+D:\Azhar\RMS\UTILITY\obj\Debug\UTILITY.dll
+D:\Azhar\RMS\UTILITY\obj\Debug\UTILITY.pdb
+D:\Azhar\RMS\UTILITY\obj\Debug\UTILITY.csprojResolveAssemblyReference.cache
+C:\Users\user\Desktop\Architecture\UTILITY\bin\Debug\UTILITY.dll
+C:\Users\user\Desktop\Architecture\UTILITY\bin\Debug\UTILITY.pdb
+C:\Users\user\Desktop\Architecture\UTILITY\obj\Debug\UTILITY.csprojResolveAssemblyReference.cache
+C:\Users\user\Desktop\Architecture\UTILITY\obj\Debug\UTILITY.dll
+C:\Users\user\Desktop\Architecture\UTILITY\obj\Debug\UTILITY.pdb
+D:\old references\Azhar\Desktop\Architecture\UTILITY\bin\Debug\UTILITY.dll
+D:\old references\Azhar\Desktop\Architecture\UTILITY\bin\Debug\UTILITY.pdb
+D:\old references\Azhar\Desktop\Architecture\UTILITY\obj\Debug\UTILITY.csprojResolveAssemblyReference.cache
+D:\old references\Azhar\Desktop\Architecture\UTILITY\obj\Debug\UTILITY.dll
+D:\old references\Azhar\Desktop\Architecture\UTILITY\obj\Debug\UTILITY.pdb
